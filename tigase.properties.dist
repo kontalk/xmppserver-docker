@@ -1,0 +1,24 @@
+# Basic XMPP parameters
+
+# XMPP service name
+XMPP_SERVICE=prime.kontalk.net
+
+# Database parameters
+
+# kontalk database user password
+MYSQL_PASSWORD=kontalk
+# root database user password
+MYSQL_ROOT_PASSWORD=root
+# database timezone
+MYSQL_TIMEZONE=UTC
+
+# Server certificates and keys
+
+# whether to use Let's Encrypt to generate certificates
+# if no other certificate is provided, a self-signed certificate will be created
+CERT_LETSENCRYPT=false
+
+# Other parameters
+
+# Max upload file size
+HTTPUPLOAD_MAX_SIZE=20971520
