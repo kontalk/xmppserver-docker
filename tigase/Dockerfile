@@ -9,10 +9,12 @@ RUN echo "deb http://http.debian.net/debian testing main contrib non-free" >/etc
 COPY apt_preferences /etc/apt/preferences
 
 # install packages
-RUN apt-get -qq update
-RUN apt-get -qq -y install wget git maven mysql-client openssl make g++ libkyotocabinet16 libkyotocabinet-dev
-RUN apt-get -qq -y install -t jessie-backports openjdk-8-jdk certbot
-RUN apt-get -qq -y install -t testing gnupg2
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
+    wget git maven mysql-client openssl make g++ libkyotocabinet16 libkyotocabinet-dev
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install -t jessie-backports \
+    openjdk-8-jdk certbot
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install -t testing \
+    gnupg2
 RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 # install tools
@@ -25,7 +27,7 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
     && chmod +x /usr/local/bin/wait-for-it
 
 # create kontalk user
-RUN useradd -ms /bin/bash kontalk
+RUN useradd --no-log-init -ms /bin/bash kontalk
 
 # will now work from the kontalk user
 USER kontalk
@@ -55,9 +57,9 @@ RUN ./post-install.sh
 # when just changing the entrypoint script
 USER root
 COPY entrypoint.sh /home/kontalk/
-RUN chown kontalk:kontalk /home/kontalk/entrypoint.sh
-RUN chmod +x /home/kontalk/entrypoint.sh
+RUN chown kontalk:kontalk /home/kontalk/entrypoint.sh && chmod +x /home/kontalk/entrypoint.sh
+RUN true
 
 # back to kontalk user and start everything up
 USER kontalk
-ENTRYPOINT ${HOME}/entrypoint.sh
+ENTRYPOINT ["/home/kontalk/entrypoint.sh"]

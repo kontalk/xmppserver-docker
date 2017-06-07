@@ -84,7 +84,7 @@ then
     cd - >/dev/null
 
     # create kontalk database objects
-    for SCRIPT in ${HOME}/kontalk/tigase-kontalk/docker/data/cleanup.sql ${HOME}/kontalk/tigase-extension/data/*.sql;
+    for SCRIPT in /tmp/data/cleanup.sql ${HOME}/kontalk/tigase-extension/data/*.sql;
     do
         mysql -h db --port 3306 -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} < ${SCRIPT}
     done
@@ -102,7 +102,7 @@ gpg2 --export ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-public.key
 gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-private.key
 
 cd ${HOME}/kontalk/tigase-kontalk
-dockerize \
+exec dockerize \
  -template /tmp/data/init.properties.in:etc/init.properties \
  -stderr logs/tigase.log.0 \
  -wait tcp://db:3306 \
