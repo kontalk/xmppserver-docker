@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# Setup script for Kontalk Docker server
+
+# TODO ask for some stuff such as hostname, ports to expose, ...
+
+cd "$(dirname "$0")"
+
+[ -f local.properties.dist ] && . local.properties.dist
+[ -f local.properties ] && . local.properties
+
+# default values
+[ -z "${XMPP_SERVICE}" ] && XMPP_SERVICE=$(hostname -d)
+[ -z "${MYSQL_TIMEZONE}" -a -f /etc/timezone ] && MYSQL_TIMEZONE=$(cat /etc/timezone)
+[ -z "${HTTPUPLOAD_MAX_SIZE}" ] && HTTPUPLOAD_MAX_SIZE=20971520
+
+# XMPP service name
+read -p "XMPP service name? [${XMPP_SERVICE}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPP_SERVICE=$new_value
+fi
+
+# MySQL root password
+read -p "MySQL root password [${MYSQL_ROOT_PASSWORD}]: " new_value
+if [ ! -z $new_value ]; then
+    MYSQL_ROOT_PASSWORD=$new_value
+fi
+
+if [ -z $MYSQL_ROOT_PASSWORD ]; then
+    echo "MySQL root password cannot be empty."
+    exit 1
+fi
+
+# MySQL kontalk password
+read -p "MySQL kontalk password [${MYSQL_PASSWORD}]: " new_value
+if [ ! -z $new_value ]; then
+    MYSQL_PASSWORD=$new_value
+fi
+
+if [ -z $MYSQL_PASSWORD ]; then
+    echo "MySQL kontalk password cannot be empty."
+    exit 1
+fi
+
+# MySQL time zone
+read -p "MySQL time zone? [${MYSQL_TIMEZONE}]: " new_value
+if [ ! -z $new_value ]; then
+    MYSQL_TIMEZONE=$new_value
+fi
+
+# max HTTP upload file size
+read -p "Max HTTP upload file size? [${HTTPUPLOAD_MAX_SIZE}]: " new_value
+if [ ! -z $new_value ]; then
+    HTTPUPLOAD_MAX_SIZE=$new_value
+fi
+
+# version/branch to build
+read -p "Kontalk version/branch to build? [${BRANCH}]: " new_value
+if [ ! -z $new_value ]; then
+    BRANCH=$new_value
+fi
+
+cat <<EOF >local.properties
+# branch to build
+BRANCH=${BRANCH}
+
+# XMPP service name
+XMPP_SERVICE=${XMPP_SERVICE}
+
+# Database parameters
+
+# kontalk database user password
+MYSQL_PASSWORD=${MYSQL_PASSWORD}
+# root database user password
+MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+# database timezone
+MYSQL_TIMEZONE=${MYSQL_TIMEZONE}
+
+# Other parameters
+
+# Max upload file size
+HTTPUPLOAD_MAX_SIZE=${HTTPUPLOAD_MAX_SIZE}
+EOF
+
+echo "You can now build the images by running ./launcher bootstrap"

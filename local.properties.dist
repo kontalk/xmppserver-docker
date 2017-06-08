@@ -1,4 +1,5 @@
-# Basic XMPP parameters
+# branch to build
+BRANCH=staging
 
 # XMPP service name
 XMPP_SERVICE=prime.kontalk.net
@@ -10,7 +11,7 @@ MYSQL_PASSWORD=kontalk
 # root database user password
 MYSQL_ROOT_PASSWORD=root
 # database timezone
-MYSQL_TIMEZONE=UTC
+MYSQL_TIMEZONE=
 
 # Server certificates and keys
 

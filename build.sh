@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+echo "THIS SCRIPT IS DEPRECATED. USE ./launcher INSTEAD."
+exit 1
+
 DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in

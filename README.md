@@ -1,6 +1,8 @@
 Kontalk server for Docker
 =========================
 
+> WARNING these instructions are outdated. Work in progress!!!
+
 Here you may find a few scripts and files to build a Kontalk container
 (actually 3 containers) for hosting a Kontalk server.
 

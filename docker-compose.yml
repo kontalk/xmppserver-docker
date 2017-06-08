@@ -7,7 +7,7 @@ services:
       - db_data:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: always
-    env_file: database.properties
+    env_file: local.properties
     environment:
       MYSQL_DATABASE: kontalk
       MYSQL_USER: kontalk
@@ -25,7 +25,7 @@ services:
       - ./data/tigase.conf:/home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
     restart: always
-    env_file: tigase.properties
+    env_file: local.properties
     environment:
       MYSQL_DATABASE: kontalk
       MYSQL_USER: kontalk
@@ -38,7 +38,7 @@ services:
       - httpupload_data:/home/kontalk/disk
       - ./data/config.yml.in:/tmp/config.yml.in
     restart: always
-    env_file: tigase.properties
+    env_file: local.properties
 
 volumes:
   db_data:

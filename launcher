@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+# Launcher script for Kontalk Docker server
+# Inspired by the Discourse launcher
+
+usage () {
+  echo "Usage: launcher COMMAND [--docker-args STRING]"
+  echo "Commands:"
+  echo "    start:      Start/initialize a container"
+  echo "    stop:       Stop a running container"
+  echo "    restart:    Restart a container"
+  echo "    destroy:    Stop and remove a container"
+  echo "    enter:      Open a shell to run commands inside the container"
+  echo "    logs:       View the Docker logs for a container"
+  echo "    bootstrap:  Bootstrap a container for the config"
+  echo "    rebuild:    Rebuild a container (destroy old, bootstrap, start new)"
+  echo
+  echo "Options:"
+  echo "    --docker-args              Extra arguments to pass when running docker"
+  exit 1
+}
+
+command=$1
+
+user_args=""
+
+while [ ${#} -gt 0 ]; do
+  case "${1}" in
+  --docker-args)
+    user_args="$2"
+    shift
+    ;;
+  esac
+
+  shift 1
+done
+
+if [ -z "$command" ]; then
+  usage
+fi
+
+cd "$(dirname "$0")"
+
+docker_path=`which docker.io || which docker`
+dockercompose_path=`which docker-compose`
+config_file=local.properties
+
+# escape sequences for output
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+install_docker() {
+  echo "Docker is not installed, you will need to install Docker in order to run Kontalk"
+  echo "See https://docs.docker.com/installation/"
+  exit 1
+}
+
+install_dockercompose() {
+  echo "Docker Compose is not installed, you will need to install Docker Compose in order to run Kontalk"
+  echo "See https://docs.docker.com/compose/install/"
+  exit 1
+}
+
+run_setup_first() {
+    echo "Run ./kontalk-setup first."
+    exit 1
+}
+
+check_prereqs() {
+    if [ -z ${docker_path} ]; then
+        install_docker
+    fi
+    if [ -z ${dockercompose_path} ]; then
+        install_dockercompose
+    fi
+    if [ ! -f ${config_file} ]; then
+        run_setup_first
+    fi
+}
+
+# check prerequisites
+check_prereqs
+
+# load configuration
+. local.properties
+
+DATADIR=data
+SSL_TRUSTED=trusted.pem
+TIGASE_CONF=init.properties.in
+HTTUPLOAD_CONF=config.yml.in
+
+run_bootstrap() {
+    # build images
+    echo "${bold}Building images for version ${BRANCH}.${normal}"
+    docker build -t kontalk/xmppserver --build-arg BRANCH=${BRANCH} tigase
+    docker build -t kontalk/httpupload httpupload
+    echo
+
+    # check GPG key
+    if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key ]; then
+        echo "${bold}Not using provided GPG server key, I'll generate one later automatically.${normal}"
+        echo "You can provide a GPG server key by exporting it into ${DATADIR}/server-private.key and ${DATADIR}/server-public.key"
+        echo "Please note that the private key MUST NOT be password-protected."
+        echo
+    fi
+
+    # check certificate
+    if [ ! -f ${DATADIR}/privatekey.pem ] || [ ! -f ${DATADIR}/certificate.pem ]; then
+        echo "${bold}Not using provided X.509 certificate, I'll generate one later automatically.${normal}"
+        echo "If you want to provide an existing X.509 certificate for the server,"
+        echo "you can copy it into ${DATADIR}/privatekey.pem and ${DATADIR}/certificate.pem"
+        echo "An optional CA chain can be provided into ${DATADIR}/cachain.pem"
+        echo
+    fi
+
+    # check trusted.pem
+    if [ ! -f ${DATADIR}/${SSL_TRUSTED} ];
+    then
+        # copy default trusted certs bundle
+        echo "Using default trusted certs bundle"
+        cp ${DATADIR}/${SSL_TRUSTED}.dist ${DATADIR}/${SSL_TRUSTED}
+        echo
+    fi
+
+    # check init.properties
+    if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
+    then
+        echo "Using default Tigase configuration"
+        cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
+        echo
+    fi
+
+    # check config.yml (httpupload)
+    if [ ! -f ${DATADIR}/${HTTUPLOAD_CONF} ];
+    then
+        echo "Using default HTTP upload component configuration"
+        cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${DATADIR}/${HTTUPLOAD_CONF}
+        echo
+    fi
+
+    $dockercompose_path build
+}
+
+run_start() {
+    (set -x; $dockercompose_path up -d)
+}
+
+run_stop() {
+    (set -x; $dockercompose_path stop -t 10)
+}
+
+case "$command" in
+    bootstrap)
+        run_bootstrap
+        echo "${bold}Successfully bootstrapped, to startup use ./launcher start${normal}"
+        exit 0
+        ;;
+
+    start)
+        run_start
+        exit 0
+        ;;
+
+    stop)
+        run_stop
+        exit 0
+        ;;
+
+    restart)
+        run_stop
+        run_start
+        exit 0
+        ;;
+
+    rebuild)
+        echo "Stopping old container"
+        run_stop
+        run_bootstrap
+
+        echo "Removing old container"
+        (set -x; $dockercompose_path rm -f)
+
+        run_start
+        exit 0
+        ;;
+
+    destroy)
+        (set -x; $dockercompose_path stop -t 10 && $dockercompose_path rm -f)
+        exit 0
+        ;;
+
+    enter)
+        exec $dockercompose_path exec xmpp /bin/bash --login
+        ;;
+
+    logs)
+        $dockercompose_path logs
+        exit 0
+        ;;
+
+esac
+
+usage
