@@ -10,8 +10,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-    restart: always
-    env_file: local.properties
+    restart: on-failure
     environment:
       MYSQL_DATABASE: kontalk
       MYSQL_USER: kontalk
@@ -29,8 +28,7 @@ services:
       - ./data:/tmp/data
       - ./data/tigase.conf:/home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
-    restart: always
-    env_file: local.properties
+    restart: on-failure
     environment:
       MYSQL_DATABASE: kontalk
       MYSQL_USER: kontalk
@@ -38,12 +36,11 @@ services:
   httpupload:
     image: kontalk/httpupload
     ports:
-      - "8828:8828"
+      - "${HTTPUPLOAD_LISTEN_PORT}:8828"
     volumes:
       - httpupload_data:/home/kontalk/disk
       - ./data/config.yml.in:/tmp/config.yml.in
-    restart: always
-    env_file: local.properties
+    restart: on-failure
 
 volumes:
   db_data:

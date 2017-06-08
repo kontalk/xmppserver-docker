@@ -15,11 +15,53 @@ cd "$(dirname "$0")"
 [ -z "${XMPP_LISTEN_PORT}" ] && XMPP_LISTEN_PORT=5222
 [ -z "${XMPPS_LISTEN_PORT}" ] && XMPPS_LISTEN_PORT=5223
 [ -z "${XMPPS2S_LISTEN_PORT}" ] && XMPPS2S_LISTEN_PORT=5269
+[ -z "${HTTPUPLOAD_MAX_SIZE}" ] && HTTPUPLOAD_MAX_SIZE=8828
+
+red=`tput setaf 1`
+yellow=`tput setaf 3`
+green=`tput setaf 2`
+reset=`tput sgr0`
+
+# version/branch to build
+echo "Kontalk is available in the following branches:"
+echo "  ${red}master${reset}: bleeding-edge, latest modifications. Possibly unstable. Use for development only."
+echo "  ${yellow}staging${reset}: used in Kontalk test server. It should have the latest features with a certain degree of stability."
+echo "  ${green}production${reset}: used in Kontalk production server. Stable and tested."
+echo "You can also specify a version tag."
+echo
+
+read -p "Kontalk version/branch to build [${BRANCH}]: " new_value
+if [ ! -z $new_value ]; then
+    BRANCH=$new_value
+fi
 
 # XMPP service name
-read -p "XMPP service name? [${XMPP_SERVICE}]: " new_value
+read -p "XMPP service name [${XMPP_SERVICE}]: " new_value
 if [ ! -z $new_value ]; then
     XMPP_SERVICE=$new_value
+fi
+
+if [ -z "${XMPP_SERVICE}" ]; then
+    echo "XMPP service name cannot be empty."
+    exit 1
+fi
+
+# XMPP plain listen port
+read -p "XMPP plain listen port [${XMPP_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPP_LISTEN_PORT=$new_value
+fi
+
+# XMPP secure listen port
+read -p "XMPP secure listen port [${XMPPS_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPPS_LISTEN_PORT=$new_value
+fi
+
+# XMPP s2s listen port
+read -p "XMPP s2s listen port [${XMPPS2S_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPPS2S_LISTEN_PORT=$new_value
 fi
 
 # MySQL root password
@@ -28,7 +70,7 @@ if [ ! -z $new_value ]; then
     MYSQL_ROOT_PASSWORD=$new_value
 fi
 
-if [ -z $MYSQL_ROOT_PASSWORD ]; then
+if [ -z ${MYSQL_ROOT_PASSWORD} ]; then
     echo "MySQL root password cannot be empty."
     exit 1
 fi
@@ -39,45 +81,54 @@ if [ ! -z $new_value ]; then
     MYSQL_PASSWORD=$new_value
 fi
 
-if [ -z $MYSQL_PASSWORD ]; then
+if [ -z ${MYSQL_PASSWORD} ]; then
     echo "MySQL kontalk password cannot be empty."
     exit 1
 fi
 
 # MySQL time zone
-read -p "MySQL time zone? [${MYSQL_TIMEZONE}]: " new_value
+read -p "MySQL time zone [${MYSQL_TIMEZONE}]: " new_value
 if [ ! -z $new_value ]; then
     MYSQL_TIMEZONE=$new_value
 fi
 
+# HTTP upload component parameters
+echo
+echo "The HTTP file upload service is used by clients to upload and download media."
+echo "It should be exposed directly or better through a reverse proxy (e.g. Nginx)."
+echo "We will ask you for the listen port exposed to the host system and the URLs seen by clients."
+echo "Note that those URLs should be available from the outside, i.e. from the Internet"
+echo
+
+read -p "HTTP file upload service listen port [${HTTPUPLOAD_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    HTTPUPLOAD_LISTEN_PORT=$new_value
+fi
+
+read -p "HTTP file upload URL [${HTTPUPLOAD_PUT_URL}]: " new_value
+if [ ! -z $new_value ]; then
+    HTTPUPLOAD_PUT_URL=$new_value
+fi
+
+if [ -z "${HTTPUPLOAD_PUT_URL}" ]; then
+    echo "HTTP file upload URL cannot be empty."
+    exit 1
+fi
+
+read -p "HTTP file download URL [${HTTPUPLOAD_GET_URL}]: " new_value
+if [ ! -z $new_value ]; then
+    HTTPUPLOAD_GET_URL=$new_value
+fi
+
+if [ -z "${HTTPUPLOAD_GET_URL}" ]; then
+    echo "HTTP file download URL cannot be empty."
+    exit 1
+fi
+
 # max HTTP upload file size
-read -p "Max HTTP upload file size? [${HTTPUPLOAD_MAX_SIZE}]: " new_value
+read -p "Max HTTP upload file size [${HTTPUPLOAD_MAX_SIZE}]: " new_value
 if [ ! -z $new_value ]; then
     HTTPUPLOAD_MAX_SIZE=$new_value
-fi
-
-# XMPP plain listen port
-read -p "XMPP plain listen port? [${XMPP_LISTEN_PORT}]: " new_value
-if [ ! -z $new_value ]; then
-    XMPP_LISTEN_PORT=$new_value
-fi
-
-# XMPP secure listen port
-read -p "XMPP secure listen port? [${XMPPS_LISTEN_PORT}]: " new_value
-if [ ! -z $new_value ]; then
-    XMPPS_LISTEN_PORT=$new_value
-fi
-
-# XMPP s2s listen port
-read -p "XMPP s2s listen port? [${XMPPS2S_LISTEN_PORT}]: " new_value
-if [ ! -z $new_value ]; then
-    XMPPS2S_LISTEN_PORT=$new_value
-fi
-
-# version/branch to build
-read -p "Kontalk version/branch to build? [${BRANCH}]: " new_value
-if [ ! -z $new_value ]; then
-    BRANCH=$new_value
 fi
 
 cat <<EOF >local.properties
@@ -103,6 +154,13 @@ MYSQL_TIMEZONE=${MYSQL_TIMEZONE}
 
 # Max upload file size
 HTTPUPLOAD_MAX_SIZE=${HTTPUPLOAD_MAX_SIZE}
+
+# HTTP listen port
+HTTPUPLOAD_LISTEN_PORT=${HTTPUPLOAD_LISTEN_PORT}
+
+# HTTP URLs
+HTTPUPLOAD_PUT_URL=${HTTPUPLOAD_PUT_URL}
+HTTPUPLOAD_GET_URL=${HTTPUPLOAD_GET_URL}
 EOF
 
 echo "You can now build the images by running ./launcher bootstrap"

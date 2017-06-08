@@ -26,3 +26,10 @@ CERT_LETSENCRYPT=false
 
 # Max upload file size
 HTTPUPLOAD_MAX_SIZE=20971520
+
+# HTTP listen port
+HTTPUPLOAD_LISTEN_PORT=8828
+
+# HTTP URLs
+HTTPUPLOAD_PUT_URL=https://prime.kontalk.net/media
+HTTPUPLOAD_GET_URL=https://prime.kontalk.net/media

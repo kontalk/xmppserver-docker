@@ -3,14 +3,16 @@ Kontalk XMPP server image
 
 This is a Docker environment for building a Docker image with a ready-to-use Kontalk server.
 
-This image can easily be used with a Docker Compose script also found in this repository.  
-As a matter of fact, this image can't work alone: it needs configuration files and a database container.  
+This image can easily be used with a Docker Compose script also found in this repository.
+As a matter of fact, this image can't work alone: it needs configuration files and a database container.
 
 To build this image just run this from a terminal:
 
 ```shell
-./build.sh
+docker build -t kontalk/xmppserver --build-arg BRANCH=${BRANCH} .
 ```
+
+${BRANCH} should contain the name of the branch of the source code to build.
 
 You can optionally pass the git branch to use as an argument to the script:
 
@@ -27,7 +29,6 @@ The following environment variables are mandatory:
 * `MYSQL_PASSWORD`: password of the MySQL kontalk account
 * `MYSQL_ROOT_PASSWORD`: password for the MySQL root account
 * `MYSQL_TIMEZONE`: MySQL timezone
-* `HTTPUPLOAD_MAX_SIZE`: max upload file size in bytes
 
 The following variables will be used if available:
 
