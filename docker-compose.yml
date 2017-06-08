@@ -12,7 +12,7 @@ services:
       MYSQL_DATABASE: kontalk
       MYSQL_USER: kontalk
 
-  tigase:
+  xmpp:
     depends_on:
       - db
     image: kontalk/xmppserver
@@ -20,7 +20,7 @@ services:
       - "5222:5222"
       - "5269:5269"
     volumes:
-      - tigase_data:/home/kontalk/data
+      - xmpp_data:/home/kontalk/data
       - ./data:/tmp/data
       - ./data/tigase.conf:/home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
@@ -42,5 +42,5 @@ services:
 
 volumes:
   db_data:
-  tigase_data:
+  xmpp_data:
   httpupload_data:
