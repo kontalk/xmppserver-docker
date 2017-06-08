@@ -1,6 +1,6 @@
 component_jid: media.{{ .Env.XMPP_SERVICE }}
 component_secret: secret
-component_host: tigase
+component_host: xmpp
 component_port: 5270
 
 storage_path : ../disk
