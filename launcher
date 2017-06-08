@@ -67,7 +67,9 @@ check_prereqs() {
 check_prereqs
 
 # load configuration
+set -a
 . local.properties
+set +a
 
 DATADIR=data
 SSL_TRUSTED=trusted.pem

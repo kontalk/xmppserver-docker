@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Setup script for Kontalk Docker server
 
-# TODO ask for some stuff such as hostname, ports to expose, ...
-
 cd "$(dirname "$0")"
 
 [ -f local.properties.dist ] && . local.properties.dist
