@@ -12,8 +12,10 @@ services:
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: on-failure
     environment:
-      MYSQL_DATABASE: kontalk
-      MYSQL_USER: kontalk
+      - MYSQL_DATABASE: kontalk
+      - MYSQL_USER: kontalk
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
 
   xmpp:
     depends_on:
@@ -30,8 +32,15 @@ services:
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
     restart: on-failure
     environment:
-      MYSQL_DATABASE: kontalk
-      MYSQL_USER: kontalk
+      - MYSQL_DATABASE: kontalk
+      - MYSQL_USER: kontalk
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_TIMEZONE
+      - XMPP_SERVICE
+      - XMPP_LISTEN_PORT
+      - XMPPS_LISTEN_PORT
+      - XMPPS2S_LISTEN_PORT
 
   httpupload:
     image: kontalk/httpupload
@@ -41,6 +50,12 @@ services:
       - httpupload_data:/home/kontalk/disk
       - ./data/config.yml.in:/tmp/config.yml.in
     restart: on-failure
+    environment:
+      - XMPP_SERVICE
+      - HTTPUPLOAD_MAX_SIZE
+      - HTTPUPLOAD_LISTEN_PORT
+      - HTTPUPLOAD_PUT_URL
+      - HTTPUPLOAD_GET_URL
 
 volumes:
   db_data:
