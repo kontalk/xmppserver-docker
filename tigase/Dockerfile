@@ -5,7 +5,7 @@ LABEL version="1.0"
 LABEL description="Kontalk server base image"
 
 # add testing and apt preferences
-RUN echo "deb http://http.debian.net/debian testing main contrib non-free" >/etc/apt/sources.list.d/testing.list
+RUN echo "deb http://http.debian.net/debian testing main" >/etc/apt/sources.list.d/testing.list
 COPY apt_preferences /etc/apt/preferences
 
 # install packages
