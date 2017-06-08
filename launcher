@@ -2,6 +2,8 @@
 # Launcher script for Kontalk Docker server
 # Inspired by the Discourse launcher
 
+set -e
+
 usage () {
   echo "Usage: launcher COMMAND"
   echo "Commands:"
