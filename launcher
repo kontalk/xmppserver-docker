@@ -3,7 +3,7 @@
 # Inspired by the Discourse launcher
 
 usage () {
-  echo "Usage: launcher COMMAND [--docker-args STRING]"
+  echo "Usage: launcher COMMAND"
   echo "Commands:"
   echo "    start:      Start/initialize a container"
   echo "    stop:       Stop a running container"
@@ -13,26 +13,10 @@ usage () {
   echo "    logs:       View the Docker logs for a container"
   echo "    bootstrap:  Bootstrap a container for the config"
   echo "    rebuild:    Rebuild a container (destroy old, bootstrap, start new)"
-  echo
-  echo "Options:"
-  echo "    --docker-args              Extra arguments to pass when running docker"
   exit 1
 }
 
 command=$1
-
-user_args=""
-
-while [ ${#} -gt 0 ]; do
-  case "${1}" in
-  --docker-args)
-    user_args="$2"
-    shift
-    ;;
-  esac
-
-  shift 1
-done
 
 if [ -z "$command" ]; then
   usage

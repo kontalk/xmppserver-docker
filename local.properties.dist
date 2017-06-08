@@ -1,8 +1,11 @@
 # branch to build
 BRANCH=staging
 
-# XMPP service name
+# XMPP parameters
 XMPP_SERVICE=prime.kontalk.net
+XMPP_LISTEN_PORT=5222
+XMPPS_LISTEN_PORT=5223
+XMPPS2S_LISTEN_PORT=5269
 
 # Database parameters
 

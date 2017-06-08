@@ -12,6 +12,9 @@ cd "$(dirname "$0")"
 [ -z "${XMPP_SERVICE}" ] && XMPP_SERVICE=$(hostname -d)
 [ -z "${MYSQL_TIMEZONE}" -a -f /etc/timezone ] && MYSQL_TIMEZONE=$(cat /etc/timezone)
 [ -z "${HTTPUPLOAD_MAX_SIZE}" ] && HTTPUPLOAD_MAX_SIZE=20971520
+[ -z "${XMPP_LISTEN_PORT}" ] && XMPP_LISTEN_PORT=5222
+[ -z "${XMPPS_LISTEN_PORT}" ] && XMPPS_LISTEN_PORT=5223
+[ -z "${XMPPS2S_LISTEN_PORT}" ] && XMPPS2S_LISTEN_PORT=5269
 
 # XMPP service name
 read -p "XMPP service name? [${XMPP_SERVICE}]: " new_value
@@ -53,6 +56,24 @@ if [ ! -z $new_value ]; then
     HTTPUPLOAD_MAX_SIZE=$new_value
 fi
 
+# XMPP plain listen port
+read -p "XMPP plain listen port? [${XMPP_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPP_LISTEN_PORT=$new_value
+fi
+
+# XMPP secure listen port
+read -p "XMPP secure listen port? [${XMPPS_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPPS_LISTEN_PORT=$new_value
+fi
+
+# XMPP s2s listen port
+read -p "XMPP s2s listen port? [${XMPPS2S_LISTEN_PORT}]: " new_value
+if [ ! -z $new_value ]; then
+    XMPPS2S_LISTEN_PORT=$new_value
+fi
+
 # version/branch to build
 read -p "Kontalk version/branch to build? [${BRANCH}]: " new_value
 if [ ! -z $new_value ]; then
@@ -63,8 +84,11 @@ cat <<EOF >local.properties
 # branch to build
 BRANCH=${BRANCH}
 
-# XMPP service name
+# XMPP parameters
 XMPP_SERVICE=${XMPP_SERVICE}
+XMPP_LISTEN_PORT=${XMPP_LISTEN_PORT}
+XMPPS_LISTEN_PORT=${XMPPS_LISTEN_PORT}
+XMPPS2S_LISTEN_PORT=${XMPPS2S_LISTEN_PORT}
 
 # Database parameters
 
