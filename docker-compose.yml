@@ -12,8 +12,8 @@ services:
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: on-failure
     environment:
-      - MYSQL_DATABASE: kontalk
-      - MYSQL_USER: kontalk
+      - MYSQL_DATABASE=kontalk
+      - MYSQL_USER=kontalk
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
 
@@ -32,8 +32,8 @@ services:
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
     restart: on-failure
     environment:
-      - MYSQL_DATABASE: kontalk
-      - MYSQL_USER: kontalk
+      - MYSQL_DATABASE=kontalk
+      - MYSQL_USER=kontalk
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
       - MYSQL_TIMEZONE
