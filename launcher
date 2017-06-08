@@ -123,11 +123,11 @@ run_bootstrap() {
         echo
     fi
 
-    $dockercompose_path build
+    $dockercompose_path --build create
 }
 
 run_start() {
-    (set -x; $dockercompose_path up -d)
+    (set -x; $dockercompose_path start)
 }
 
 run_stop() {

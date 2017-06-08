@@ -2,7 +2,7 @@
 # DO NOT RUN docker-compose on this file directly
 # Use ./launcher start
 
-version: '3'
+version: '2'
 
 services:
   db:
