@@ -75,8 +75,8 @@ HTTUPLOAD_CONF=config.yml.in
 run_bootstrap() {
     # build images
     echo "${bold}Building images for version ${BRANCH}.${normal}"
-    docker build -t kontalk/xmppserver --build-arg BRANCH=${BRANCH} tigase
-    docker build -t kontalk/httpupload httpupload
+    docker build -t kontalk/xmppserver --build-arg BRANCH=${BRANCH} tigase || exit 1
+    docker build -t kontalk/httpupload httpupload || exit 1
     echo
 
     # check GPG key
