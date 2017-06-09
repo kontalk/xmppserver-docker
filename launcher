@@ -162,10 +162,10 @@ case "$command" in
         ;;
 
     rebuild)
-        echo "Stopping old container"
+        echo "${bold}Stopping old container${normal}"
         run_stop
 
-        echo "Removing old container"
+        echo "${bold}Removing old container${normal}"
         (set -x; $dockercompose_path rm -f)
         run_bootstrap
 
