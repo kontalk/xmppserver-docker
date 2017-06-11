@@ -97,7 +97,7 @@ Run this command:
 
 The script will start 3 containers in the background:
 
-* **xmpp**: it will contain the actual Tigase XMPP server
+* **xmpp**: the actual [Tigase XMPP server](http://tigase.net/content/tigase-xmpp-server)
 * **db**: MySQL database server
 * **httpupload**: the HTTP upload component needed to upload media (pictures, audio files, etc.)
 
