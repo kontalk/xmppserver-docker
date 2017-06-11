@@ -101,7 +101,7 @@ The script will start 3 containers in the background:
 * **httpupload**: the HTTP upload component needed to upload media (pictures, audio files, etc.)
 
 The launcher script has some other useful commands that can be used. You can see
-a quick help by launching it without any argument.
+a quick help by launching it without any arguments.
 
 ## Upgrade/rebuild the containers
 
