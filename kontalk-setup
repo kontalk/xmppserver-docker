@@ -130,6 +130,10 @@ if [ ! -z $new_value ]; then
 fi
 
 cat <<EOF >local.properties
+# Kontalk server configuration
+# if you edit this file you must rebuild your containers:
+# ./launcher rebuild
+
 # version/branch to build
 BRANCH=${BRANCH}
 
