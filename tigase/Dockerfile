@@ -39,7 +39,9 @@ RUN mkdir -p data
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ARG BRANCH
 ENV BRANCH ${BRANCH:-master}
-RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash -s - kontalk ${BRANCH}
+ARG SERVER_BRANCH
+ENV SERVER_BRANCH ${SERVER_BRANCH:-master}
+RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash -s - kontalk ${BRANCH} ${SERVER_BRANCH}
 
 # install other requirements (jkyotocabinet)
 USER root

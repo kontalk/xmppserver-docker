@@ -77,12 +77,51 @@ DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
 HTTUPLOAD_CONF=config.yml.in
+REPO_URL=https://github.com/kontalk/tigase-extension.git
+SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
+
+docker_compose() {
+    if [ ! -f .version ]; then
+        echo "Run ./launcher bootstrap first."
+        exit 1
+    fi
+    (set -x; VERSION=$(cat .version) ${dockercompose_path} $*)
+}
+
+docker_compose_exec() {
+    if [ ! -f .version ]; then
+        echo "Run ./launcher bootstrap first."
+        exit 1
+    fi
+    VERSION=$(cat .version) exec ${dockercompose_path} $*
+}
 
 run_bootstrap() {
+    # get information about what we are going to build
+    build=${BRANCH}
+    serverbuild=${BRANCH}
+    docker_tag=$(echo ${BRANCH} | colrm 8)
+
+    refs=$(git ls-remote ${REPO_URL} ${BRANCH})
+    commit=$(echo "${refs}" | cut -f 1 -)
+    ref=$(echo "${refs}" | cut -f 2 -)
+
+    serverrefs=$(git ls-remote ${SERVERREPO_URL} ${BRANCH})
+    servercommit=$(echo "${serverrefs}" | cut -f 1 -)
+
+    echo ${ref} | grep heads >/dev/null &&
+        docker_tag=$(echo ${commit} | colrm 8) &&
+        build=${commit} &&
+        serverbuild=${servercommit} &&
+        echo "${bold}Building images for branch ${BRANCH} (${commit})${normal}"
+    echo ${ref} | grep tags >/dev/null &&
+        docker_tag=${build} &&
+        serverbuild=${build}-kontalk &&
+        echo "${bold}Building images for version ${BRANCH}${normal}"
+
     # build images
-    echo "${bold}Building images for version ${BRANCH}.${normal}"
-    docker build -t kontalk/xmppserver --build-arg BRANCH=${BRANCH} tigase
-    docker build -t kontalk/httpupload httpupload
+    docker build -t kontalk/xmppserver:${docker_tag} --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild} tigase >/dev/null
+    docker build -t kontalk/httpupload httpupload >/dev/null
     echo
 
     # check GPG key
@@ -127,15 +166,16 @@ run_bootstrap() {
         echo
     fi
 
-    $dockercompose_path create --build
+    echo ${docker_tag} > .version
+    docker_compose create --build
 }
 
 run_start() {
-    (set -x; $dockercompose_path start)
+    docker_compose start
 }
 
 run_stop() {
-    (set -x; $dockercompose_path stop -t 10)
+    docker_compose stop -t 10
 }
 
 case "$command" in
@@ -166,7 +206,7 @@ case "$command" in
         run_stop
 
         echo "${bold}Removing old container${normal}"
-        (set -x; $dockercompose_path rm -f)
+        docker_compose rm -f
         run_bootstrap
 
         run_start
@@ -174,17 +214,17 @@ case "$command" in
         ;;
 
     destroy)
-        (set -x; $dockercompose_path stop -t 10 && $dockercompose_path rm -f)
+        docker_compose stop -t 10 && docker_compose rm -f
         exit 0
         ;;
 
     enter)
-        exec $dockercompose_path exec xmpp /bin/bash --login
+        docker_compose_exec exec xmpp /bin/bash --login
         ;;
 
     *)
         shift 1
-        exec $dockercompose_path $command $*
+        docker_compose_exec ${command} $*
         ;;
 
 esac

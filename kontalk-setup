@@ -130,7 +130,7 @@ if [ ! -z $new_value ]; then
 fi
 
 cat <<EOF >local.properties
-# branch to build
+# version/branch to build
 BRANCH=${BRANCH}
 
 # XMPP parameters
