@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+function urlencode() {
+    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
+}
+
 # create SSL certificate if needed
 SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
 if [ ! -f ${SSL_CERT} ];
@@ -76,18 +80,17 @@ then
         -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
         -adminJID admin@${XMPP_SERVICE} -adminJIDpass dummy \
         -logLevel ALL -useSSL false -serverTimezone ${MYSQL_TIMEZONE}
-    java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
-        -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
-        -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
-        -logLevel ALL -useSSL false -serverTimezone ${MYSQL_TIMEZONE} \
-        database/mysql-pubsub-schema-3.0.0.sql
     cd - >/dev/null
 
     # create kontalk database objects
-    for SCRIPT in /tmp/data/cleanup.sql ${HOME}/kontalk/tigase-extension/data/*.sql;
-    do
-        mysql -h db --port 3306 -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} < ${SCRIPT}
-    done
+    cd ${HOME}/kontalk/tigase-extension &&
+    mvn flyway:baseline \
+        -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
+        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} &&
+    mvn flyway:migrate \
+        -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
+        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} &&
+    cd - >/dev/null
 
     # replace our server entry
     mysql -h db --port 3306 -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} <<EOF
