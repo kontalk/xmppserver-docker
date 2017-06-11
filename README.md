@@ -45,6 +45,7 @@ HTTP file upload service listen port [8828]:
 HTTP file upload URL [https://10.0.2.2:8828/]: 
 HTTP file download URL [https://10.0.2.2:8828/]: 
 Max HTTP upload file size [20971520]: 
+
 You can now build the images by running ./launcher bootstrap
 ```
 
