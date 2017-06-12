@@ -18,7 +18,7 @@ A setup script can be used to generate a local configuration:
 ./kontalk-setup
 ```
 
-Answer all questions or skip them by pressing enter: the default value will be used (unless specified otherwise):
+Answer all questions or skip them by pressing enter: the default value will be used (unless specified otherwise).
 
 ```
 Please give a name to your new Kontalk server instance.
@@ -53,7 +53,7 @@ You can now build the images by running ./launcher bootstrap
 ```
 
 A file called `local.properties` will be created. Please note that any modification
-to this file will require a rebuild (see later).
+to this file will require a rebuild ([see below](#upgraderebuild-the-containers)).
 If all went ok, you can now do the bootstrap:
 
 ```bash
@@ -103,6 +103,8 @@ The script will start 3 containers in the background:
 * **xmpp**: the actual [Tigase XMPP server](http://tigase.net/content/tigase-xmpp-server)
 * **db**: MySQL database server
 * **httpupload**: the HTTP upload component needed to upload media (pictures, audio files, etc.)
+
+The actual container name will be prefixed with the name given to `kontalk-setup` (e.g. prime_xmpp, prime_db, prime_httpupload).
 
 The launcher script has some other useful commands that can be used. You can see
 a quick help by launching it without any arguments.

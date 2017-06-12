@@ -15,19 +15,24 @@ cd "$(dirname "$0")"
 [ -z "${XMPPS2S_LISTEN_PORT}" ] && XMPPS2S_LISTEN_PORT=5269
 [ -z "${HTTPUPLOAD_MAX_SIZE}" ] && HTTPUPLOAD_MAX_SIZE=8828
 
-red=`tput setaf 1`
-yellow=`tput setaf 3`
-green=`tput setaf 2`
-reset=`tput sgr0`
+bold=$(tput bold)
+red=$(tput setaf 1)
+yellow=$(tput setaf 3)
+green=$(tput setaf 2)
+reset=$(tput sgr0)
 
 echo "Please give a name to your new Kontalk server instance."
+
+if [ -f local.properties ]; then
+    echo "${bold}If you have existing containers and need to change this, please exit now (Ctrl+C),"
+    echo "destroy the old containers and launch kontalk-setup again.${reset}"
+fi
 
 # instance name (container prefix)
 read -p "Kontalk instance name [${INSTANCE_NAME}]: " new_value
 if [ ! -z $new_value ]; then
     INSTANCE_NAME=$new_value
 fi
-
 
 # version/branch to build
 echo
