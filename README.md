@@ -21,30 +21,33 @@ A setup script can be used to generate a local configuration:
 Answer all questions or skip them by pressing enter: the default value will be used (unless specified otherwise):
 
 ```
+Please give a name to your new Kontalk server instance.
+Kontalk instance name [prime]:
+
 Kontalk is available in the following branches:
   master: bleeding-edge, latest modifications. Possibly unstable. Use for development only.
   staging: used in Kontalk test server. It should have the latest features with a certain degree of stability.
   production: used in Kontalk production server. Stable and tested.
 You can also specify a version tag.
 
-Kontalk version/branch to build [staging]: 
-XMPP service name [prime.kontalk.net]: 
-XMPP plain listen port [5222]: 
-XMPP secure listen port [5223]: 
-XMPP s2s listen port [5269]: 
-MySQL root password [root]: 
-MySQL kontalk password [kontalk]: 
-MySQL time zone [Europe/Rome]: 
+Kontalk version/branch to build [staging]:
+XMPP service name [prime.kontalk.net]:
+XMPP plain listen port [5222]:
+XMPP secure listen port [5223]:
+XMPP s2s listen port [5269]:
+MySQL root password [root]:
+MySQL kontalk password [kontalk]:
+MySQL time zone [Europe/Rome]:
 
 The HTTP file upload service is used by clients to upload and download media.
 It should be exposed directly or better through a reverse proxy (e.g. Nginx).
 We will ask you for the listen port exposed to the host system and the URLs seen by clients.
 Note that those URLs should be available from the outside, i.e. from the Internet
 
-HTTP file upload service listen port [8828]: 
-HTTP file upload URL [https://10.0.2.2:8828/]: 
-HTTP file download URL [https://10.0.2.2:8828/]: 
-Max HTTP upload file size [20971520]: 
+HTTP file upload service listen port [8828]:
+HTTP file upload URL [https://10.0.2.2:8828/]:
+HTTP file download URL [https://10.0.2.2:8828/]:
+Max HTTP upload file size [20971520]:
 
 You can now build the images by running ./launcher bootstrap
 ```
