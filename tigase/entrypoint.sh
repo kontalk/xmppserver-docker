@@ -72,9 +72,9 @@ then
     echo "Creating database"
 
     # create tigase database objects
-    cd ${HOME}/kontalk/tigase-server &&
-    rm -f jars/*.jar &&
-    cp ../tigase-kontalk/jars/*.jar jars/ &&
+    cd ${HOME}/kontalk/tigase-server
+    rm -f jars/*.jar
+    cp ../tigase-kontalk/jars/*.jar jars/
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
         -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
@@ -83,13 +83,13 @@ then
     cd - >/dev/null
 
     # create kontalk database objects
-    cd ${HOME}/kontalk/tigase-extension &&
+    cd ${HOME}/kontalk/tigase-extension
     mvn flyway:baseline \
         -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
-        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} &&
+        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD}
     mvn flyway:migrate \
         -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
-        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} &&
+        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD}
     cd - >/dev/null
 
     # replace our server entry
