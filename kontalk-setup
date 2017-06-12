@@ -43,9 +43,9 @@ echo "  ${green}production${reset}: used in Kontalk production server. Stable an
 echo "You can also specify a version tag."
 echo
 
-read -p "Kontalk version/branch to build [${BRANCH}]: " new_value
+read -p "Kontalk version/branch to build [${VERSION}]: " new_value
 if [ ! -z $new_value ]; then
-    BRANCH=$new_value
+    VERSION=$new_value
 fi
 
 # XMPP service name
@@ -152,7 +152,7 @@ cat <<EOF >local.properties
 INSTANCE_NAME=${INSTANCE_NAME}
 
 # version/branch to build
-BRANCH=${BRANCH}
+VERSION=${VERSION}
 
 # XMPP parameters
 XMPP_SERVICE=${XMPP_SERVICE}

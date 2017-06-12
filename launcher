@@ -89,36 +89,36 @@ SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
 
 docker_compose() {
     check_version
-    (export VERSION=$(cat .version); set -x; ${dockercompose_path} $*)
+    (export IMAGE_VERSION=$(cat .version); set -x; ${dockercompose_path} $*)
 }
 
 docker_compose_exec() {
     check_version
-    export VERSION=$(cat .version); set -x; exec ${dockercompose_path} $*
+    export IMAGE_VERSION=$(cat .version); set -x; exec ${dockercompose_path} $*
 }
 
 run_bootstrap() {
     # get information about what we are going to build
-    build=${BRANCH}
-    serverbuild=${BRANCH}
-    docker_tag=$(echo ${BRANCH} | colrm 8)
+    build=${VERSION}
+    serverbuild=${VERSION}
+    docker_tag=$(echo ${VERSION} | colrm 8)
 
-    refs=$(git ls-remote ${REPO_URL} ${BRANCH})
+    refs=$(git ls-remote ${REPO_URL} ${VERSION})
     commit=$(echo "${refs}" | cut -f 1 -)
     ref=$(echo "${refs}" | cut -f 2 -)
 
-    serverrefs=$(git ls-remote ${SERVERREPO_URL} ${BRANCH})
+    serverrefs=$(git ls-remote ${SERVERREPO_URL} ${VERSION})
     servercommit=$(echo "${serverrefs}" | cut -f 1 -)
 
     echo ${ref} | grep heads >/dev/null &&
         docker_tag=$(echo ${commit} | colrm 8) &&
         build=${commit} &&
         serverbuild=${servercommit} &&
-        echo "${bold}Building images for branch ${BRANCH} (${commit})${normal}"
+        echo "${bold}Building images for branch ${VERSION} (${commit})${normal}"
     echo ${ref} | grep tags >/dev/null &&
         docker_tag=${build} &&
         serverbuild=${build}-kontalk &&
-        echo "${bold}Building images for version ${BRANCH}${normal}"
+        echo "${bold}Building images for version ${VERSION}${normal}"
 
     # build images
     echo "This could take several minutes."

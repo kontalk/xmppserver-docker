@@ -1,8 +1,8 @@
 # instance name
 INSTANCE_NAME=prime
 
-# branch to build
-BRANCH=staging
+# version/branch to build
+VERSION=staging
 
 # XMPP parameters
 XMPP_SERVICE=prime.kontalk.net
