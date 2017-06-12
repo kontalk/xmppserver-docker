@@ -6,6 +6,7 @@ version: '2'
 
 services:
   db:
+    container_name: "${INSTANCE_NAME}_db"
     image: mysql:5.6
     volumes:
       - db_data:/var/lib/mysql
@@ -18,6 +19,7 @@ services:
       - MYSQL_ROOT_PASSWORD
 
   xmpp:
+    container_name: "${INSTANCE_NAME}_xmpp"
     depends_on:
       - db
     image: kontalk/xmppserver:${VERSION}
@@ -43,6 +45,7 @@ services:
       - XMPPS2S_LISTEN_PORT
 
   httpupload:
+    container_name: "${INSTANCE_NAME}_httpupload"
     image: kontalk/httpupload
     ports:
       - "${HTTPUPLOAD_LISTEN_PORT}:8828"

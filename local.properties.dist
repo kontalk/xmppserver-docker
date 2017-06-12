@@ -1,3 +1,6 @@
+# instance name
+INSTANCE_NAME=prime
+
 # branch to build
 BRANCH=staging
 

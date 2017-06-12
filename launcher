@@ -65,6 +65,13 @@ check_prereqs() {
     fi
 }
 
+check_version() {
+    if [ ! -f .version ]; then
+        echo "Run ./launcher bootstrap first."
+        exit 1
+    fi
+}
+
 # check prerequisites
 check_prereqs
 
@@ -81,19 +88,13 @@ REPO_URL=https://github.com/kontalk/tigase-extension.git
 SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
 
 docker_compose() {
-    if [ ! -f .version ]; then
-        echo "Run ./launcher bootstrap first."
-        exit 1
-    fi
-    (set -x; VERSION=$(cat .version) ${dockercompose_path} $*)
+    check_version
+    (export VERSION=$(cat .version); set -x; ${dockercompose_path} $*)
 }
 
 docker_compose_exec() {
-    if [ ! -f .version ]; then
-        echo "Run ./launcher bootstrap first."
-        exit 1
-    fi
-    VERSION=$(cat .version) exec ${dockercompose_path} $*
+    check_version
+    export VERSION=$(cat .version); set -x; exec ${dockercompose_path} $*
 }
 
 run_bootstrap() {
