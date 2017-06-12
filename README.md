@@ -107,7 +107,7 @@ The script will start 3 containers in the background:
 The actual container names will be prefixed with the instance name given to `kontalk-setup`.
 For example, if you typed "prime" as the instance name, containers will be called prime_xmpp, prime_db, prime_httpupload.
 
-The instance name can be changed in `local.properties` (INSTANCE_NAME), but before doing that you
+The instance name can be changed in local.properties (INSTANCE_NAME), but before doing that you
 must destroy the old containers (`./launcher destroy`), alter INSTANCE_NAME and then run `./launcher bootstrap`.
 
 The launcher script has some other useful commands that can be used. You can see
@@ -118,7 +118,7 @@ a quick help by launching it without any arguments.
 You must rebuild the containers if you:
 
 * modified local.properties (run `./launcher rebuild`)
-* want to upgrade the Kontalk server (run `./kontalk-setup` first if you want to choose a different version altogether)
+* want to upgrade the Kontalk server (meaning modifying the VERSION property in local.properties)
 
 You don't need to rebuild if you modify `data/init.properties.in`, but you will need to restart it:
 

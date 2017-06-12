@@ -22,7 +22,7 @@ services:
     container_name: "${INSTANCE_NAME}_xmpp"
     depends_on:
       - db
-    image: kontalk/xmppserver:${VERSION}
+    image: kontalk/xmppserver:${IMAGE_VERSION}
     ports:
       - "${XMPP_LISTEN_PORT}:5222"
       - "${XMPPS_LISTEN_PORT}:5223"
