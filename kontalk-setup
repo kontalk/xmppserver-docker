@@ -182,5 +182,7 @@ HTTPUPLOAD_PUT_URL=${HTTPUPLOAD_PUT_URL}
 HTTPUPLOAD_GET_URL=${HTTPUPLOAD_GET_URL}
 EOF
 
+rm -f .version
+
 echo
 echo "You can now build the images by running ./launcher bootstrap"
