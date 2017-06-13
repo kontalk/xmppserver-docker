@@ -200,16 +200,19 @@ case "$command" in
         ;;
 
     start)
+        shift 1
         run_start $*
         exit 0
         ;;
 
     stop)
+        shift 1
         run_stop $*
         exit 0
         ;;
 
     restart)
+        shift 1
         run_stop $*
         run_start $*
         exit 0
