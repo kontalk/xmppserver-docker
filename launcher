@@ -99,6 +99,35 @@ docker_compose_exec() {
     export IMAGE_VERSION=$(cat .version); set -x; exec ${dockercompose_path} -p ${INSTANCE_NAME} $*
 }
 
+monitor_docker_build() {
+    image="$1"
+    base="$2"
+    shift 2
+
+    ${docker_path} build -t ${image} $* ${base} >/dev/null &
+    docker_pid=$!
+
+    trap "kill ${docker_pid} 2>/dev/null" EXIT
+
+    spin[0]="-"
+    spin[1]="\\"
+    spin[2]="|"
+    spin[3]="/"
+
+    echo -n "${image} ${spin[0]}"
+    while kill -0 ${docker_pid} 2>/dev/null
+    do
+        for i in "${spin[@]}"
+        do
+            echo -ne "\b$i"
+            sleep 0.1
+        done
+    done
+
+    trap - EXIT
+    wait ${docker_pid} && echo -e "\bOK"
+}
+
 run_bootstrap() {
     # get information about what we are going to build
     build=${VERSION}
@@ -124,8 +153,8 @@ run_bootstrap() {
 
     # build images
     echo "This could take several minutes."
-    docker build -t kontalk/xmppserver:${docker_tag} --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild} tigase >/dev/null
-    docker build -t kontalk/httpupload httpupload >/dev/null
+    monitor_docker_build kontalk/xmppserver:${docker_tag} tigase --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild}
+    monitor_docker_build kontalk/httpupload httpupload
     echo
 
     # ensure config directory exists
