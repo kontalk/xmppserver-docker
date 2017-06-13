@@ -29,9 +29,7 @@ services:
       - "${XMPPS2S_LISTEN_PORT}:5269"
     volumes:
       - xmpp_data:/home/kontalk/data
-      - ./data:/tmp/data
-      - ./data/tigase.conf:/home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf
-      - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
+      - ./config:/tmp/data
     restart: on-failure
     environment:
       - MYSQL_DATABASE=kontalk
@@ -51,7 +49,7 @@ services:
       - "${HTTPUPLOAD_LISTEN_PORT}:8828"
     volumes:
       - httpupload_data:/home/kontalk/disk
-      - ./data/config.yml.in:/tmp/config.yml.in
+      - ./config/config.yml.in:/tmp/config.yml.in
     restart: on-failure
     environment:
       - XMPP_SERVICE

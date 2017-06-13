@@ -94,6 +94,10 @@ EOF
     touch ${HOME}/.databasesetup
 fi
 
+# copy some other stuff
+cp /tmp/data/tigase.conf ${HOME}/kontalk/tigase-kontalk/etc/tigase.conf
+cp /tmp/data/trusted.pem ${HOME}/kontalk/tigase-kontalk/trusted.pem
+
 # export keys to file
 gpg2 --export ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-public.key
 gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-private.key

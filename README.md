@@ -71,14 +71,14 @@ A more serious environment will require prior creation of a SSL certificate and
 a GPG key for the server. For the containers to use them, certificate and keys must
 be located in:
 
-* `data/server-private.key`: GPG server private key (**must not be password-protected!**)
-* `data/server-public.key`: GPG server public key
-* `data/privatekey.pem`: SSL private key
-* `data/certificate.pem`: SSL certificate
-* `data/cachain.pem`: SSL certificate authorities chain (optional)
+* `config/server-private.key`: GPG server private key (**must not be password-protected!**)
+* `config/server-public.key`: GPG server public key
+* `config/privatekey.pem`: SSL private key
+* `config/certificate.pem`: SSL certificate
+* `config/cachain.pem`: SSL certificate authorities chain (optional)
 
 Your setup will also surely include some tweaking on the server configuration.
-You can edit the default configuration file `data/init.properties.in`.
+You can edit the default configuration file `config/init.properties.in`.
 The local server tutorial can be used to configure some of the parameters,
 e.g. [registration providers](/docs/local-server-howto.md#registration) or
 [push notifications](/docs/local-server-howto.md#push-notifications). A quick
@@ -90,7 +90,7 @@ We strongly recommend giving it a look to know if the default configuration suit
 variables untouched (e.g. `{{ .Env.FINGERPRINT }}`): they will be replaced
 automatically.
 
-Another file to look into would be `data/tigase.conf`. Some environment variables are defined,
+Another file to look into would be `config/tigase.conf`. Some environment variables are defined,
 you should especially check JAVA_OPTIONS which contains the JVM parameters (heap memory, GC parameters, etc.).
 Note that despite the extension, it's a simple shell script file sourced by the server startup script,
 so bash syntax applies.
@@ -125,7 +125,7 @@ You must rebuild the containers if you:
 * modified local.properties (run `./launcher rebuild`)
 * want to upgrade the Kontalk server (meaning modifying the VERSION property in local.properties)
 
-You don't need to rebuild if you modify `data/init.properties.in`, but you will need to restart it:
+You don't need to rebuild if you modify `config/init.properties.in`, but you will need to restart it:
 
 ```bash
 ./launcher restart

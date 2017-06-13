@@ -81,6 +81,7 @@ set -a
 set +a
 
 DATADIR=data
+CONFDIR=config
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
 TIGASE_ENV=tigase.conf
@@ -127,52 +128,55 @@ run_bootstrap() {
     docker build -t kontalk/httpupload httpupload >/dev/null
     echo
 
+    # ensure config directory exists
+    mkdir -p ${CONFDIR}
+
     # check GPG key
-    if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key ]; then
+    if [ ! -f ${CONFDIR}/server-private.key ] || [ ! -f ${CONFDIR}/server-public.key ]; then
         echo "${bold}Not using provided GPG server key, I'll generate one later automatically.${normal}"
-        echo "You can provide a GPG server key by exporting it into ${DATADIR}/server-private.key and ${DATADIR}/server-public.key"
+        echo "You can provide a GPG server key by exporting it into ${CONFDIR}/server-private.key and ${CONFDIR}/server-public.key"
         echo "Please note that the private key MUST NOT be password-protected."
         echo
     fi
 
     # check certificate
-    if [ ! -f ${DATADIR}/privatekey.pem ] || [ ! -f ${DATADIR}/certificate.pem ]; then
+    if [ ! -f ${CONFDIR}/privatekey.pem ] || [ ! -f ${CONFDIR}/certificate.pem ]; then
         echo "${bold}Not using provided X.509 certificate, I'll generate one later automatically.${normal}"
         echo "If you want to provide an existing X.509 certificate for the server,"
-        echo "you can copy it into ${DATADIR}/privatekey.pem and ${DATADIR}/certificate.pem"
-        echo "An optional CA chain can be provided into ${DATADIR}/cachain.pem"
+        echo "you can copy it into ${CONFDIR}/privatekey.pem and ${CONFDIR}/certificate.pem"
+        echo "An optional CA chain can be provided into ${CONFDIR}/cachain.pem"
         echo
     fi
 
     # check trusted.pem
-    if [ ! -f ${DATADIR}/${SSL_TRUSTED} ];
+    if [ ! -f ${CONFDIR}/${SSL_TRUSTED} ];
     then
         # copy default trusted certs bundle
         echo "Using default trusted certs bundle"
-        cp ${DATADIR}/${SSL_TRUSTED}.dist ${DATADIR}/${SSL_TRUSTED}
+        cp ${DATADIR}/${SSL_TRUSTED}.dist ${CONFDIR}/${SSL_TRUSTED}
         echo
     fi
 
     # check init.properties
-    if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
+    if [ ! -f ${CONFDIR}/${TIGASE_CONF} ];
     then
         echo "Using default Tigase configuration"
-        cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
+        cp ${DATADIR}/${TIGASE_CONF}.dist ${CONFDIR}/${TIGASE_CONF}
         echo
     fi
 
-    if [ ! -f ${DATADIR}/${TIGASE_ENV} ];
+    if [ ! -f ${CONFDIR}/${TIGASE_ENV} ];
     then
         echo "Using default Tigase environment"
-        cp ${DATADIR}/${TIGASE_ENV}.dist ${DATADIR}/${TIGASE_ENV}
+        cp ${DATADIR}/${TIGASE_ENV}.dist ${CONFDIR}/${TIGASE_ENV}
         echo
     fi
 
     # check config.yml (httpupload)
-    if [ ! -f ${DATADIR}/${HTTUPLOAD_CONF} ];
+    if [ ! -f ${CONFDIR}/${HTTUPLOAD_CONF} ];
     then
         echo "Using default HTTP upload component configuration"
-        cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${DATADIR}/${HTTUPLOAD_CONF}
+        cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${CONFDIR}/${HTTUPLOAD_CONF}
         echo
     fi
 
