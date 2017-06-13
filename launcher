@@ -214,7 +214,7 @@ run_bootstrap() {
 }
 
 run_start() {
-    docker_compose start $*
+    docker_compose up -d $*
 }
 
 run_stop() {
@@ -252,15 +252,15 @@ case "$command" in
         run_stop
 
         echo "${bold}Removing old container${normal}"
-        docker_compose rm -f
-        run_bootstrap
+        docker_compose down
 
+        run_bootstrap
         run_start
         exit 0
         ;;
 
     destroy)
-        docker_compose stop -t 10 && docker_compose rm -f
+        run_stop && docker_compose down
         exit 0
         ;;
 
