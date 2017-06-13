@@ -83,6 +83,7 @@ set +a
 DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
+TIGASE_ENV=tigase.conf
 HTTUPLOAD_CONF=config.yml.in
 REPO_URL=https://github.com/kontalk/tigase-extension.git
 SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
@@ -157,6 +158,13 @@ run_bootstrap() {
     then
         echo "Using default Tigase configuration"
         cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
+        echo
+    fi
+
+    if [ ! -f ${DATADIR}/${TIGASE_ENV} ];
+    then
+        echo "Using default Tigase environment"
+        cp ${DATADIR}/${TIGASE_ENV}.dist ${DATADIR}/${TIGASE_ENV}
         echo
     fi
 
