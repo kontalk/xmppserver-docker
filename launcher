@@ -89,12 +89,12 @@ SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
 
 docker_compose() {
     check_version
-    (export IMAGE_VERSION=$(cat .version); set -x; ${dockercompose_path} $*)
+    (export IMAGE_VERSION=$(cat .version); set -x; ${dockercompose_path} -p ${INSTANCE_NAME} $*)
 }
 
 docker_compose_exec() {
     check_version
-    export IMAGE_VERSION=$(cat .version); set -x; exec ${dockercompose_path} $*
+    export IMAGE_VERSION=$(cat .version); set -x; exec ${dockercompose_path} -p ${INSTANCE_NAME} $*
 }
 
 run_bootstrap() {
