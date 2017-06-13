@@ -248,10 +248,7 @@ case "$command" in
         ;;
 
     rebuild)
-        echo "${bold}Stopping old container${normal}"
-        run_stop
-
-        echo "${bold}Removing old container${normal}"
+        echo "${bold}Stopping and removing old container${normal}"
         docker_compose down
 
         run_bootstrap
@@ -260,7 +257,7 @@ case "$command" in
         ;;
 
     destroy)
-        run_stop && docker_compose down
+        docker_compose down
         exit 0
         ;;
 
