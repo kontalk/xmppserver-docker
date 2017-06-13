@@ -7,14 +7,14 @@ set -e
 usage () {
   echo "Usage: launcher COMMAND"
   echo "Commands:"
-  echo "    start:      Start/initialize a container"
-  echo "    stop:       Stop a running container"
-  echo "    restart:    Restart a container"
-  echo "    destroy:    Stop and remove a container"
-  echo "    enter:      Open a shell to run commands inside the container"
-  echo "    logs:       View the Docker logs for a container"
-  echo "    bootstrap:  Bootstrap a container for the config"
-  echo "    rebuild:    Rebuild a container (destroy old, bootstrap, start new)"
+  echo "    start:      Start/initialize containers"
+  echo "    stop:       Stop running containers"
+  echo "    restart:    Restart containers"
+  echo "    destroy:    Stop and remove containers"
+  echo "    enter:      Open a shell to run commands inside the xmpp container"
+  echo "    logs:       View the Docker logs for containers"
+  echo "    bootstrap:  Bootstrap containers for the config"
+  echo "    rebuild:    Rebuild containers (destroy old, bootstrap, start new)"
   echo
   echo "Any other command will be passed through to docker-compose, including all arguments."
   exit 1
@@ -248,7 +248,7 @@ case "$command" in
         ;;
 
     rebuild)
-        echo "${bold}Stopping and removing old container${normal}"
+        echo "${bold}Stopping and removing old containers${normal}"
         docker_compose down
 
         run_bootstrap
