@@ -181,11 +181,11 @@ run_bootstrap() {
 }
 
 run_start() {
-    docker_compose start
+    docker_compose start $*
 }
 
 run_stop() {
-    docker_compose stop -t 10
+    docker_compose stop -t 10 $*
 }
 
 case "$command" in
@@ -196,18 +196,18 @@ case "$command" in
         ;;
 
     start)
-        run_start
+        run_start $*
         exit 0
         ;;
 
     stop)
-        run_stop
+        run_stop $*
         exit 0
         ;;
 
     restart)
-        run_stop
-        run_start
+        run_stop $*
+        run_start $*
         exit 0
         ;;
 
