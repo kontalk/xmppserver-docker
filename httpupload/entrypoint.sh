@@ -15,6 +15,6 @@ fi
 
 cd ${HOME}/HttpUploadComponent
 exec dockerize \
- -force -template /tmp/config.yml.in:config.yml \
+ -template /tmp/config.yml.in:config.yml \
  -stdout httpupload.log \
  python3 httpupload/server.py --logfile httpupload.log
