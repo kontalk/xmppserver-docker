@@ -90,6 +90,11 @@ We strongly recommend giving it a look to know if the default configuration suit
 variables untouched (e.g. `{{ .Env.FINGERPRINT }}`): they will be replaced
 automatically.
 
+Another file to look into would be `data/tigase.conf`. Some environment variables are defined,
+you should especially check JAVA_OPTIONS which contains the JVM parameters (heap memory, GC parameters, etc.).
+Note that despite the extension, it's a simple shell script file sourced by the server startup script,
+so bash syntax applies.
+
 ## Start the containers
 
 Run this command:
