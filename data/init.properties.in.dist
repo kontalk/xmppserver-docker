@@ -16,8 +16,8 @@ sess-man/plugins-conf/network-domain=kontalk.net
 
 # Database configuration (the two db-uri parameters must be identical)
 --user-db=mysql
---user-db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
-sess-man/plugins-conf/db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
+--user-db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ urlquery .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
+sess-man/plugins-conf/db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ urlquery .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
 
 # Registration provider configuration
 # Dummy provider configuration
