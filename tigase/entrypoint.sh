@@ -21,7 +21,8 @@ then
     fi
 else
     echo "Using provided SSL certificate"
-    (cat /tmp/data/certificate.pem /tmp/data/privatekey.pem /tmp/data/cachain.pem >${SSL_CERT} 2>/dev/null; exit 0)
+    cat /tmp/data/certificate.pem /tmp/data/privatekey.pem >${SSL_CERT}
+    [ -f /tmp/data/cachain.pem ] && cat /tmp/data/cachain.pem >>${SSL_CERT}
 fi
 
 # create GPG key if needed
