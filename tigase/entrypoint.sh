@@ -7,24 +7,21 @@ function urlencode() {
 
 # create SSL certificate if needed
 SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
-if [ ! -f ${SSL_CERT} ];
+mkdir -p $(dirname ${SSL_CERT})
+if [ ! -f /tmp/data/privatekey.pem ] || [ ! -f /tmp/data/certificate.pem ];
 then
-    mkdir -p $(dirname ${SSL_CERT})
-    if [ ! -f /tmp/data/privatekey.pem ] || [ ! -f /tmp/data/certificate.pem ];
-    then
-        if [ "${CERT_LETSENCRYPT}" == "true" ]; then
-            echo "Let's Encrypt certificates are not supported yet."
-            exit 1
-        else
-            echo "Generating SSL certificate"
-            openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=${XMPP_SERVICE}" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
-            cat cert.pem key.pem >${SSL_CERT} &&
-            rm cert.pem key.pem
-        fi
+    if [ "${CERT_LETSENCRYPT}" == "true" ]; then
+        echo "Let's Encrypt certificates are not supported yet."
+        exit 1
     else
-        echo "Using provided SSL certificate"
-        cat /tmp/data/certificate.pem /tmp/data/privatekey.pem /tmp/data/cachain.pem >${SSL_CERT} 2>/dev/null
+        echo "Generating SSL certificate"
+        openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=${XMPP_SERVICE}" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
+        cat cert.pem key.pem >${SSL_CERT} &&
+        rm cert.pem key.pem
     fi
+else
+    echo "Using provided SSL certificate"
+    cat /tmp/data/certificate.pem /tmp/data/privatekey.pem /tmp/data/cachain.pem >${SSL_CERT} 2>/dev/null
 fi
 
 # create GPG key if needed
