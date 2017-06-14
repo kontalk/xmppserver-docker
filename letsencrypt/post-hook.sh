@@ -30,5 +30,5 @@ else
     install_certificate "${XMPP_SERVICE}"
 fi
 
-echo "Starting Kontalk server."
-../launcher start
+echo "Restarting Kontalk server."
+../launcher restart
