@@ -34,7 +34,7 @@ services:
     logging:
       options:
         max-size: "10m"
-        max-file: 100
+        max-file: "100"
     environment:
       - MYSQL_DATABASE=kontalk
       - MYSQL_USER=kontalk
@@ -58,7 +58,7 @@ services:
     logging:
       options:
         max-size: "10m"
-        max-file: 10
+        max-file: "10"
     environment:
       - XMPP_SERVICE
       - HTTPUPLOAD_MAX_SIZE
