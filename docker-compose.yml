@@ -31,6 +31,10 @@ services:
       - xmpp_data:/home/kontalk/data
       - ./config:/tmp/data
     restart: on-failure
+    logging:
+      options:
+        max-size: 10m
+        max-file: 100
     environment:
       - MYSQL_DATABASE=kontalk
       - MYSQL_USER=kontalk
@@ -51,6 +55,10 @@ services:
       - httpupload_data:/home/kontalk/disk
       - ./config/config.yml.in:/tmp/config.yml.in
     restart: on-failure
+    logging:
+      options:
+        max-size: 10m
+        max-file: 10
     environment:
       - XMPP_SERVICE
       - HTTPUPLOAD_MAX_SIZE
