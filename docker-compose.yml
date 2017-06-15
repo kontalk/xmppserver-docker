@@ -33,7 +33,7 @@ services:
     restart: on-failure
     logging:
       options:
-        max-size: 10m
+        max-size: "10m"
         max-file: 100
     environment:
       - MYSQL_DATABASE=kontalk
@@ -57,7 +57,7 @@ services:
     restart: on-failure
     logging:
       options:
-        max-size: 10m
+        max-size: "10m"
         max-file: 10
     environment:
       - XMPP_SERVICE
