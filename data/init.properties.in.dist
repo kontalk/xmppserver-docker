@@ -31,7 +31,8 @@ sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
 # (any CA chain will do, it won't actually be used but Tigase won't work without it)
 
 # Client endpoint configuration
---c2s-ports=5222
+--c2s-ports=5222,5223
+c2s/connections/5223/socket=ssl
 c2s/clientCertCA=trusted.pem
 
 # Websocket endpoint configuration
