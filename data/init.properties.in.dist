@@ -98,6 +98,8 @@ sess-man/plugins-conf/presence-state/extended-presence-processors=org.kontalk.xm
 c2s/processors[s]=urn:xmpp:sm:3=org.kontalk.xmppserver.KontalkIOProcessor
 c2s/processors/urn\:xmpp\:sm\:3/ack-timeout[I]=60
 message-router/components/msg-receivers/amp.active[B]=false
+basic-conf/logging/handlers=java.util.logging.ConsoleHandler
+basic-conf/logging/java.util.logging.ConsoleHandler.level=ALL
 --vhost-anonymous-enabled=false
 --vhost-tls-required=false
 --hardened-mode=true

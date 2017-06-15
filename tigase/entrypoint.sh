@@ -103,6 +103,5 @@ gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-p
 cd ${HOME}/kontalk/tigase-kontalk
 exec dockerize \
  -template /tmp/data/init.properties.in:etc/init.properties \
- -stderr logs/tigase.log.0 \
  -wait tcp://db:3306 \
  scripts/tigase.sh run etc/tigase.conf
