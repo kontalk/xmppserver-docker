@@ -6,9 +6,23 @@ Here you may find a few scripts and files to build a Kontalk container
 
 ## Requirements
 
-* A recent Linux distro (we suggest Debian)
+* Recent 64-bit Linux distro (we suggest Debian)
 * Docker
 * Docker Compose
+* git
+
+## Setting up environment
+
+Setup a new user account (or use an existing one, root is not needed and not recommended)
+on a system with Docker installed and enabled. The user account should be part of the docker
+group so it will be able to use Docker.
+
+Clone this repository in any location (we recommend the home directory of your user account):
+
+```bash
+git clone https://github.com/kontalk/xmppserver-docker.git kontalk-server
+cd kontalk-server
+```
 
 ## Configure the containers
 
