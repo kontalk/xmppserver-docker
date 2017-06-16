@@ -94,8 +94,8 @@ be located in:
 Your setup will also surely include some tweaking on the server configuration.
 You can edit the default configuration file `config/init.properties.in`.
 The local server tutorial can be used to configure some of the parameters,
-e.g. [registration providers](/docs/local-server-howto.md#registration) or
-[push notifications](/docs/local-server-howto.md#push-notifications). A quick
+e.g. [registration providers](//github.com/kontalk/tigase-kontalk/blob/master/docs/local-server-howto.md#registration) or
+[push notifications](//github.com/kontalk/tigase-kontalk/blob/master/docs/local-server-howto.md#push-notifications). A quick
 reference to Tigase parameters can be found [here](http://docs.tigase.org/tigase-server/7.1.0/Properties_Guide/html/),
 while the administration guide is [here](http://docs.tigase.org/tigase-server/7.1.0/Administration_Guide/html/).
 We strongly recommend giving it a look to know if the default configuration suits your needs.
