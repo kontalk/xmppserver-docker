@@ -14,8 +14,8 @@ http_port: 8828
 http_keyfile: server.key
 http_certfile: server.crt
 
-get_url : https://{{ .Env.XMPP_SERVICE }}:8828/
-put_url : https://{{ .Env.XMPP_SERVICE }}:8828/
+get_url : {{ .Env.HTTPUPLOAD_GET_URL }}
+put_url : {{ .Env.HTTPUPLOAD_PUT_URL }}
 
 expire_interval: 82800  #time in secs between expiry runs (82800 secs = 23 hours). set to '0' to disable
 expire_maxage: 2592000  #files older than this (in secs) get deleted by expiry runs (2592000 = 30 days)
