@@ -104,28 +104,32 @@ monitor_docker_build() {
     base="$2"
     shift 2
 
-    ${docker_path} build -t ${image} $* ${base} >/dev/null &
-    docker_pid=$!
+    if [ -n "${DEBUG}" ]; then
+        ${docker_path} build -t ${image} $* ${base}
+    else
+        ${docker_path} build -t ${image} $* ${base} >/dev/null &
+        docker_pid=$!
 
-    trap "kill ${docker_pid} 2>/dev/null" EXIT
+        trap "kill ${docker_pid} 2>/dev/null" EXIT
 
-    spin[0]="-"
-    spin[1]="\\"
-    spin[2]="|"
-    spin[3]="/"
+        spin[0]="-"
+        spin[1]="\\"
+        spin[2]="|"
+        spin[3]="/"
 
-    echo -n "${image} ${spin[0]}"
-    while kill -0 ${docker_pid} 2>/dev/null
-    do
-        for i in "${spin[@]}"
+        echo -n "${image} ${spin[0]}"
+        while kill -0 ${docker_pid} 2>/dev/null
         do
-            echo -ne "\b$i"
-            sleep 0.1
+            for i in "${spin[@]}"
+            do
+                echo -ne "\b$i"
+                sleep 0.1
+            done
         done
-    done
 
-    trap - EXIT
-    wait ${docker_pid} && echo -e "\bOK"
+        trap - EXIT
+        wait ${docker_pid} && echo -e "\bOK"
+    fi
 }
 
 run_bootstrap() {
