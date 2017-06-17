@@ -79,7 +79,7 @@ bosh/clientCertCA=trusted.pem
 --comp-name-4=ext
 --comp-class-4=tigase.server.ext.ComponentProtocol
 # these must match HttpFileUploadComponent configuration
---external=media.prime.kontalk.net:secret:listen:5270
+--external=media.{{ .Env.XMPP_SERVICE }}:secret:listen:5270
 
 # GCM push notifications
 # remember to fix --sm-plugins too (see above)
