@@ -1,12 +1,12 @@
 # use BRANCH variable to provide source code branch
-FROM debian:jessie-backports
+FROM debian:stretch-backports
 LABEL "org.kontalk"="Kontalk devteam"
 LABEL version="1.0"
 LABEL description="Kontalk server HTTP upload component image"
 
 # install packages
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
-    wget git openssl python3 python3-pip
+    wget git openssl python3 python3-pip python3-setuptools
 
 # install tools
 ENV DOCKERIZE_VERSION v0.5.0

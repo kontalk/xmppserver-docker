@@ -1,5 +1,5 @@
 # use BRANCH variable to provide source code branch
-FROM debian:jessie-backports
+FROM debian:stretch-backports
 LABEL "org.kontalk"="Kontalk devteam"
 LABEL version="1.0"
 LABEL description="Kontalk server base image"
@@ -10,11 +10,7 @@ COPY apt_preferences /etc/apt/preferences
 
 # install packages
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
-    wget git maven mysql-client openssl make g++ libkyotocabinet16 libkyotocabinet-dev
-RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install -t jessie-backports \
-    openjdk-8-jdk certbot
-RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install -t testing \
-    gnupg2
+    wget git maven mysql-client openssl certbot openjdk-8-jdk gnupg2 make g++ libkyotocabinet16v5 libkyotocabinet-dev
 RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 # install tools
