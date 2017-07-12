@@ -105,7 +105,7 @@ variables untouched (e.g. `{{ .Env.FINGERPRINT }}`): they will be replaced
 automatically.
 
 Another file to look into would be `config/tigase.conf`. Some environment variables are defined,
-you should especially check JAVA_OPTIONS which contains the JVM parameters (heap memory, GC parameters, etc.).
+you should especially check JAVA\_OPTIONS which contains the JVM parameters (heap memory, GC parameters, etc.).
 Note that despite the extension, it's a simple shell script file sourced by the server startup script,
 so bash syntax applies.
 
@@ -124,10 +124,10 @@ The script will start 3 containers in the background:
 * **httpupload**: the HTTP upload component needed to upload media (pictures, audio files, etc.)
 
 The actual container names will be prefixed with the instance name given to `kontalk-setup`.
-For example, if you typed "prime" as the instance name, containers will be called prime_xmpp, prime_db, prime_httpupload.
+For example, if you typed "prime" as the instance name, containers will be called prime\_xmpp, prime\_db, prime\_httpupload.
 
-The instance name can be changed in local.properties (INSTANCE_NAME), but before doing that you
-must destroy the old containers (`./launcher destroy`), alter INSTANCE_NAME and then run `./launcher bootstrap`.
+The instance name can be changed in local.properties (INSTANCE\_NAME), but before doing that you
+must destroy the old containers (`./launcher destroy`), alter INSTANCE\_NAME and then run `./launcher bootstrap`.
 
 The launcher script has some other useful commands that can be used. You can see
 a quick help by launching it without any arguments.
