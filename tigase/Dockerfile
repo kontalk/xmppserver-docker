@@ -56,7 +56,6 @@ RUN ./post-install.sh
 USER root
 COPY entrypoint.sh /home/kontalk/
 RUN chown kontalk:kontalk /home/kontalk/entrypoint.sh && chmod +x /home/kontalk/entrypoint.sh
-RUN true
 
 # back to kontalk user and start everything up
 USER kontalk
