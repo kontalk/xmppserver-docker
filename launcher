@@ -214,7 +214,6 @@ run_bootstrap() {
     fi
 
     echo ${docker_tag} > .version
-    docker_compose create --build
 }
 
 run_start() {
