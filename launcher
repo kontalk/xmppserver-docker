@@ -172,6 +172,13 @@ run_bootstrap() {
         echo
     fi
 
+    # check if private GPG key is not password-protected
+    if [ -f ${CONFDIR}/server-private.key ] && gpg2 --list-packets ${CONFDIR}/server-private.key | grep protected &>/dev/null; then
+        echo "${bold}The provided GPG server key is password-protected.${normal}"
+        echo "That can't be used in an automated system. Please remove the passphrase from the private key using GnuPG and export it again."
+        exit 1
+    fi
+
     # check certificate
     if [ ! -f ${CONFDIR}/privatekey.pem ] || [ ! -f ${CONFDIR}/certificate.pem ]; then
         echo "${bold}Not using provided X.509 certificate, I'll generate one later automatically.${normal}"
