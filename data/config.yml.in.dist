@@ -11,8 +11,8 @@ max_file_size: {{ .Env.HTTPUPLOAD_MAX_SIZE }}
 
 http_address: 0.0.0.0
 http_port: 8828
-http_keyfile: server.key
-http_certfile: server.crt
+#http_keyfile: server.key
+#http_certfile: server.crt
 
 get_url : {{ .Env.HTTPUPLOAD_GET_URL }}
 put_url : {{ .Env.HTTPUPLOAD_PUT_URL }}
