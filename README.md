@@ -144,3 +144,8 @@ You don't need to rebuild if you modify `config/init.properties.in`, but you wil
 ```bash
 ./launcher restart
 ```
+
+## Help and support
+
+You can ask for further information on how to deploy a Kontalk server and share your experiences on our community forum:
+https://forum.kontalk.org/c/support/server
