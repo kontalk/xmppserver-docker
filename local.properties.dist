@@ -18,6 +18,9 @@ MYSQL_PASSWORD=kontalk
 MYSQL_ROOT_PASSWORD=root
 # database timezone
 MYSQL_TIMEZONE=
+# database initial baseline
+# alter this only if you know what you are doing
+DATABASE_BASELINE=1
 
 # Server certificates and keys
 

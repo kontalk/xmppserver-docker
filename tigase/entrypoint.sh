@@ -78,7 +78,7 @@ then
     cd ${HOME}/kontalk/tigase-extension
     mvn flyway:baseline \
         -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
-        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD}
+        -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} -Dflyway.baselineVersion=${DATABASE_BASELINE}
     mvn flyway:migrate \
         -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
         -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD}
