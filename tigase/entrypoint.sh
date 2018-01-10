@@ -6,7 +6,7 @@ function urlencode() {
 }
 
 # create SSL certificate if needed
-SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
+SSL_CERT="${HOME}/kontalk-server/certs/${XMPP_SERVICE}.pem"
 mkdir -p $(dirname ${SSL_CERT})
 if [ ! -f /tmp/data/privatekey.pem ] || [ ! -f /tmp/data/certificate.pem ];
 then
@@ -64,9 +64,9 @@ then
     echo "Creating database"
 
     # create tigase database objects
-    cd ${HOME}/kontalk/tigase-server
+    cd ${HOME}/kontalk-server/tigase-server
     rm -f jars/*.jar
-    cp ../tigase-kontalk/jars/*.jar jars/
+    cp ../jars/*.jar jars/
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
         -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
@@ -75,7 +75,7 @@ then
     cd - >/dev/null
 
     # create kontalk database objects
-    cd ${HOME}/kontalk/tigase-extension
+    cd ${HOME}/kontalk-server/tigase-extension
     mvn flyway:baseline \
         -Dflyway.url=jdbc:mysql://db/${MYSQL_DATABASE}?serverTimezone=$(urlencode ${MYSQL_TIMEZONE}) \
         -Dflyway.user=${MYSQL_USER} -Dflyway.password=${MYSQL_PASSWORD} -Dflyway.baselineVersion=${DATABASE_BASELINE}
@@ -93,14 +93,14 @@ EOF
 fi
 
 # copy some other stuff
-cp /tmp/data/tigase.conf ${HOME}/kontalk/tigase-kontalk/etc/tigase.conf
-cp /tmp/data/trusted.pem ${HOME}/kontalk/tigase-kontalk/trusted.pem
+cp /tmp/data/tigase.conf ${HOME}/kontalk-server/etc/tigase.conf
+cp /tmp/data/trusted.pem ${HOME}/kontalk-server/trusted.pem
 
 # export keys to file
-gpg2 --export ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-public.key
-gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-private.key
+gpg2 --export ${FINGERPRINT} >${HOME}/kontalk-server/server-public.key
+gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk-server/server-private.key
 
-cd ${HOME}/kontalk/tigase-kontalk
+cd ${HOME}/kontalk-server
 exec dockerize \
  -template /tmp/data/init.properties.in:etc/init.properties \
  -wait tcp://db:3306 \

@@ -86,8 +86,7 @@ SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
 TIGASE_ENV=tigase.conf
 HTTUPLOAD_CONF=config.yml.in
-REPO_URL=https://github.com/kontalk/tigase-extension.git
-SERVERREPO_URL=https://github.com/kontalk/tigase-server.git
+REPO_URL=https://github.com/kontalk/tigase-kontalk.git
 
 docker_compose() {
     check_version
@@ -142,17 +141,12 @@ run_bootstrap() {
     commit=$(echo "${refs}" | cut -f 1 -)
     ref=$(echo "${refs}" | cut -f 2 -)
 
-    serverrefs=$(git ls-remote ${SERVERREPO_URL} ${VERSION})
-    servercommit=$(echo "${serverrefs}" | cut -f 1 -)
-
     echo ${ref} | grep heads >/dev/null &&
         docker_tag=$(echo ${commit} | colrm 8) &&
         build=${commit} &&
-        serverbuild=${servercommit} &&
         echo "${bold}Building images for branch ${VERSION} (${commit})${normal}"
     echo ${ref} | grep tags >/dev/null &&
         docker_tag=${build} &&
-        serverbuild=${build}-kontalk &&
         echo "${bold}Building images for version ${VERSION}${normal}"
 
     # build images

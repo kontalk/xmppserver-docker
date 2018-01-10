@@ -1,7 +1,6 @@
 # use BRANCH variable to provide source code branch
 FROM debian:stretch-backports
 LABEL "org.kontalk"="Kontalk devteam"
-LABEL version="1.0"
 LABEL description="Kontalk server base image"
 
 # add testing and apt preferences
@@ -14,7 +13,7 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 # install tools
-ENV DOCKERIZE_VERSION v0.5.0
+ENV DOCKERIZE_VERSION v0.6.0
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
@@ -35,9 +34,7 @@ RUN mkdir -p data
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ARG BRANCH
 ENV BRANCH ${BRANCH:-master}
-ARG SERVER_BRANCH
-ENV SERVER_BRANCH ${SERVER_BRANCH:-master}
-RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash -s - kontalk ${BRANCH} ${SERVER_BRANCH}
+RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/${BRANCH}/scripts/installer.sh | bash -s - kontalk-server ${BRANCH}
 
 # install other requirements (jkyotocabinet)
 USER root
