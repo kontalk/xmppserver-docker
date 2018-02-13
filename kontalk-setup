@@ -168,6 +168,8 @@ MYSQL_PASSWORD=${MYSQL_PASSWORD}
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 # database timezone
 MYSQL_TIMEZONE=${MYSQL_TIMEZONE}
+# alter this only if you know what you are doing
+DATABASE_BASELINE=1
 
 # Other parameters
 
