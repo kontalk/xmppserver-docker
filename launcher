@@ -33,8 +33,10 @@ dockercompose_path=`which docker-compose`
 config_file=local.properties
 
 # escape sequences for output
-bold=$(tput bold)
-normal=$(tput sgr0)
+set +e
+bold=$(tput bold 2>/dev/null || false)
+normal=$(tput sgr0 2>/dev/null || false)
+set -e
 
 install_docker() {
   echo "Docker is not installed, you will need to install Docker in order to run Kontalk"
