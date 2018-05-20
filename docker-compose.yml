@@ -17,6 +17,8 @@ services:
       - MYSQL_USER=kontalk
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
+    networks:
+      - default
 
   xmpp:
     container_name: "${INSTANCE_NAME}_xmpp"
@@ -46,6 +48,9 @@ services:
       - XMPP_LISTEN_PORT
       - XMPPS_LISTEN_PORT
       - XMPPS2S_LISTEN_PORT
+    networks:
+      - default
+      - elk
 
   httpupload:
     container_name: "${INSTANCE_NAME}_httpupload"
@@ -66,8 +71,17 @@ services:
       - HTTPUPLOAD_LISTEN_PORT
       - HTTPUPLOAD_PUT_URL
       - HTTPUPLOAD_GET_URL
+    networks:
+      - default
+      - elk
 
 volumes:
   db_data:
   xmpp_data:
   httpupload_data:
+
+networks:
+  default:
+  elk:
+    external:
+      name: "${INSTANCE_NAME}log_elk"
