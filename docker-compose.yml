@@ -83,5 +83,6 @@ volumes:
 networks:
   default:
   elk:
-    external:
-      name: "${INSTANCE_NAME}log_elk"
+# Uncomment to enable link to ELK logging
+#    external:
+#      name: "${INSTANCE_NAME}log_elk"
