@@ -153,7 +153,7 @@ run_bootstrap() {
 
     # build images
     echo "This could take several minutes."
-    monitor_docker_build kontalk/xmppserver:${docker_tag} tigase --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild}
+    docker pull kontalk/xmppserver:${docker_tag} || monitor_docker_build kontalk/xmppserver:${docker_tag} tigase --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild}
     monitor_docker_build kontalk/httpupload httpupload
     echo
 
