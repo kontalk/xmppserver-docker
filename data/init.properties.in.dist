@@ -18,6 +18,7 @@ sess-man/plugins-conf/network-domain=kontalk.net
 --user-db=mysql
 --user-db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ urlquery .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
 sess-man/plugins-conf/db-uri=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ urlquery .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
+pubsub/pubsub-repo-url=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .Env.MYSQL_USER }}&password={{ urlquery .Env.MYSQL_PASSWORD }}&useUnicode=true&characterEncoding=UTF-8&serverTimezone={{ urlquery .Env.MYSQL_TIMEZONE }}
 
 # Registration provider configuration
 # Dummy provider configuration
@@ -71,6 +72,7 @@ bosh/clientCertCA=trusted.pem
 --comp-name-2=probe
 --comp-class-2=org.kontalk.xmppserver.probe.ProbeComponent
 
+# For group chats
 --comp-name-3=multicast
 --comp-class-3=org.kontalk.xmppserver.ExtendedAddressing
 
@@ -81,10 +83,14 @@ bosh/clientCertCA=trusted.pem
 # these must match HttpFileUploadComponent configuration
 --external=media.{{ .Env.XMPP_SERVICE }}:secret:listen:5270
 
+# For other stuff, including OMEMO
+--comp-name-5=pubsub
+--comp-class-5=tigase.pubsub.PubSubComponent
+
 # GCM push notifications
 # remember to fix --sm-plugins too (see above)
-#--comp-name-5=push
-#--comp-class-5=org.kontalk.xmppserver.KontalkLegacyPushComponent
+#--comp-name-6=push
+#--comp-class-6=org.kontalk.xmppserver.KontalkLegacyPushComponent
 #push/gcm-projectid=PROJECT-ID
 #push/gcm-apikey=API-KEY
 
@@ -98,6 +104,9 @@ sess-man/plugins-conf/presence-state/extended-presence-processors=org.kontalk.xm
 c2s/processors[s]=urn:xmpp:sm:3=org.kontalk.xmppserver.KontalkIOProcessor
 c2s/processors/urn\:xmpp\:sm\:3/ack-timeout[I]=60
 message-router/components/msg-receivers/amp.active[B]=false
+pubsub/pubsub-repo-class=tigase.pubsub.repository.PubSubDAOJDBC
+pubsub/persistent-pep[B]=true
+pubsub/send-last-published-item-on-presence[B]=true
 
 basic-conf/logging/handlers=biz.paluch.logging.gelf.jul.GelfLogHandler,java.util.logging.ConsoleHandler
 basic-conf/logging/java.util.logging.ConsoleHandler.level=ALL
