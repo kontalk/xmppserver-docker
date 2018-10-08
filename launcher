@@ -237,7 +237,9 @@ run_backup() {
 
     # create temporary directory
     OUTDIR="${BACKUP_PATH}/${INSTANCE_NAME}-`date +%Y-%m-%d_%H-%M-%S`"
-    mkdir -p "${OUTDIR}"
+    mkdir -p "${OUTDIR}/db"
+    mkdir -p "${OUTDIR}/httpupload"
+    mkdir -p "${OUTDIR}/xmpp"
 
     # dump the database
     docker_compose exec xmpp /usr/bin/mysqldump \
@@ -249,24 +251,24 @@ run_backup() {
         --set-charset \
         --no-autocommit \
         --host=db --user=kontalk --password="${MYSQL_PASSWORD}" \
-        kontalk >"${OUTDIR}/kontalk.sql"
+        kontalk >"${OUTDIR}/db/kontalk.sql"
 
     # copy httpupload files
     # not really transactional, but we can live with it
     docker run --rm -v "${INSTANCE_NAME}_httpupload_data:/out_data" \
-        busybox tar -C /out_data -cvf - . >"${OUTDIR}/httpupload_data.tar"
+        busybox tar -C /out_data -cvf - . >"${OUTDIR}/httpupload/disk.tar"
 
     # copy xmpp files
     # TODO create kyoto cabinet tools image based on busybox so we can use kchashmgr copy
     docker run --rm -v "${INSTANCE_NAME}_xmpp_data:/out_data" \
-        busybox cat /out_data/keyring.kch >"${OUTDIR}/keyring.kch"
+        busybox cat /out_data/keyring.kch >"${OUTDIR}/xmpp/keyring.kch"
 
     # create the backup file (intentionally manually crafted list of files)
     OUTFILE="${OUTDIR}.tar.gz"
     tar -C "${OUTDIR}" -cvzf "${OUTFILE}" \
-        "kontalk.sql" \
-        "httpupload_data.tar" \
-        "keyring.kch"
+        "db/" \
+        "httpupload/" \
+        "xmpp/"
     rm -fR "${OUTDIR}"
 
     echo "Backup created: ${OUTFILE}"
