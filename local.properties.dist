@@ -39,3 +39,6 @@ HTTPUPLOAD_LISTEN_PORT=8828
 # HTTP URLs
 HTTPUPLOAD_PUT_URL=https://prime.kontalk.net/media
 HTTPUPLOAD_GET_URL=https://prime.kontalk.net/media
+
+# Backup location
+BACKUP_PATH=/mnt/test_backup

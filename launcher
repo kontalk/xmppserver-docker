@@ -227,6 +227,43 @@ run_stop() {
     docker_compose stop -t 10 $*
 }
 
+run_backup() {
+    if [[ ! -d "${BACKUP_PATH}" ]]; then
+        echo "Backup path not configured or not a directory. Please configure an accessible directory in the BACKUP_PATH configuration key in local.properties."
+        exit 1
+    fi
+
+    # create temporary directory
+    OUTDIR="${BACKUP_PATH}/dump-`date +%Y-%m-%d_%H-%M-%S`"
+    mkdir -p "${OUTDIR}"
+
+    # dump the database
+    docker_compose exec xmpp /usr/bin/mysqldump \
+        --skip-opt \
+        --single-transaction \
+        --quick \
+        --create-options \
+        --extended-insert \
+        --set-charset \
+        --no-autocommit \
+        --host=db --user=kontalk --password="${MYSQL_PASSWORD}" \
+        kontalk >"${OUTDIR}/kontalk.sql"
+
+    # copy httpupload files
+    # not really transactional, but we can live with it
+    docker run --rm -v "${INSTANCE_NAME}_httpupload_data:/out_data" \
+        busybox tar -C /out_data -cvf - . >"${OUTDIR}/httpupload_data.tar"
+
+    # copy xmpp files
+    # TODO create kyoto cabinet tools image based on busybox so we can use kchashmgr copy
+    docker run --rm -v "${INSTANCE_NAME}_xmpp_data:/out_data" \
+        busybox cat /out_data/keyring.kch >"${OUTDIR}/keyring.kch"
+
+    # create the backup file
+    tar -C "${OUTDIR}" -cvzf "${OUTDIR}.tar.gz" .
+    rm -fR "${OUTDIR}"
+}
+
 case "$command" in
     bootstrap)
         run_bootstrap
@@ -265,6 +302,16 @@ case "$command" in
     destroy)
         docker_compose down
         exit 0
+        ;;
+
+    backup)
+        run_backup
+        exit 0
+        ;;
+
+    restore)
+        echo "Backup not implemented yet."
+        exit 1
         ;;
 
     enter)
