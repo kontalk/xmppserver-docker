@@ -261,10 +261,9 @@ run_backup() {
     docker run --rm -v "${INSTANCE_NAME}_xmpp_data:/out_data" \
         busybox cat /out_data/keyring.kch >"${OUTDIR}/keyring.kch"
 
-    # create the backup file
+    # create the backup file (intentionally manually crafted list of files)
     OUTFILE="${OUTDIR}.tar.gz"
     tar -C "${OUTDIR}" -cvzf "${OUTFILE}" \
-        # (intentionally manually crafted list of files)
         "kontalk.sql" \
         "httpupload_data.tar" \
         "keyring.kch"
