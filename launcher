@@ -318,6 +318,10 @@ case "$command" in
         docker_compose_exec exec xmpp /bin/bash --login
         ;;
 
+    root)
+        docker_compose_exec exec --privileged --user root xmpp /bin/bash --login
+        ;;
+
     *)
         shift 1
         docker_compose_exec ${command} $*
