@@ -275,6 +275,12 @@ run_backup() {
     echo "${bold}Backup created: ${OUTFILE}${normal}"
 }
 
+run_restore() {
+    # TODO
+    echo "Restore not implemented yet."
+    exit 1
+}
+
 case "$command" in
     bootstrap)
         run_bootstrap
@@ -321,8 +327,8 @@ case "$command" in
         ;;
 
     restore)
-        echo "Backup not implemented yet."
-        exit 1
+        run_restore
+        exit 0
         ;;
 
     enter)
