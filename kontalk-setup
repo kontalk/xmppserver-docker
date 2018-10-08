@@ -198,4 +198,4 @@ EOF
 rm -f .version
 
 echo
-echo "You can now build the images by running ./launcher bootstrap"
+echo "You can now build the images by running \`./launcher bootstrap\`"

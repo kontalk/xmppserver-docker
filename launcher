@@ -53,7 +53,7 @@ install_dockercompose() {
 }
 
 run_setup_first() {
-    echo "Run ./kontalk-setup first."
+    echo "Run \`./kontalk-setup\` first."
     exit 1
 }
 
@@ -71,7 +71,7 @@ check_prereqs() {
 
 check_version() {
     if [ ! -f .version ]; then
-        echo "Run ./launcher bootstrap first."
+        echo "Run \`./launcher bootstrap\` first."
         exit 1
     fi
 }
@@ -293,7 +293,7 @@ run_restore() {
 case "$command" in
     bootstrap)
         run_bootstrap
-        echo "${bold}Successfully bootstrapped, to startup use ./launcher start${normal}"
+        echo "${bold}Successfully bootstrapped, to startup use \`./launcher start\`${normal}"
         exit 0
         ;;
 
