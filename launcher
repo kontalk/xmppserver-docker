@@ -276,6 +276,15 @@ run_backup() {
 }
 
 run_restore() {
+    RESTORE_FILE="$1"
+    # TODO if $1 is empty, take latest (by name) file in BACKUP_PATH/${INSTANCE_NAME}_*.tar.gz
+
+    # TODO ask for confirmation
+
+    # TODO take down the whole stack
+
+    # TODO restore...
+
     # TODO
     echo "Restore not implemented yet."
     exit 1
@@ -327,7 +336,7 @@ case "$command" in
         ;;
 
     restore)
-        run_restore
+        run_restore $*
         exit 0
         ;;
 
