@@ -236,7 +236,7 @@ run_backup() {
     fi
 
     # create temporary directory
-    OUTDIR="${BACKUP_PATH}/dump-`date +%Y-%m-%d_%H-%M-%S`"
+    OUTDIR="${BACKUP_PATH}/${INSTANCE_NAME}-`date +%Y-%m-%d_%H-%M-%S`"
     mkdir -p "${OUTDIR}"
 
     # dump the database
@@ -262,8 +262,15 @@ run_backup() {
         busybox cat /out_data/keyring.kch >"${OUTDIR}/keyring.kch"
 
     # create the backup file
-    tar -C "${OUTDIR}" -cvzf "${OUTDIR}.tar.gz" .
+    OUTFILE="${OUTDIR}.tar.gz"
+    tar -C "${OUTDIR}" -cvzf "${OUTFILE}" \
+        # (intentionally manually crafted list of files)
+        "kontalk.sql" \
+        "httpupload_data.tar" \
+        "keyring.kch"
     rm -fR "${OUTDIR}"
+
+    echo "Backup created: ${OUTFILE}"
 }
 
 case "$command" in
