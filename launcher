@@ -271,7 +271,8 @@ run_backup() {
         "xmpp/"
     rm -fR "${OUTDIR}"
 
-    echo "Backup created: ${OUTFILE}"
+    echo
+    echo "${bold}Backup created: ${OUTFILE}${normal}"
 }
 
 case "$command" in
