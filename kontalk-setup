@@ -13,7 +13,8 @@ cd "$(dirname "$0")"
 [ -z "${XMPP_LISTEN_PORT}" ] && XMPP_LISTEN_PORT=5222
 [ -z "${XMPPS_LISTEN_PORT}" ] && XMPPS_LISTEN_PORT=5223
 [ -z "${XMPPS2S_LISTEN_PORT}" ] && XMPPS2S_LISTEN_PORT=5269
-[ -z "${HTTPUPLOAD_MAX_SIZE}" ] && HTTPUPLOAD_MAX_SIZE=8828
+[ -z "${HTTPUPLOAD_LISTEN_PORT}" ] && HTTPUPLOAD_LISTEN_PORT=8828
+[ -z "${BACKUP_PATH}" ] && BACKUP_PATH=
 
 bold=$(tput bold)
 red=$(tput setaf 1)
@@ -144,6 +145,12 @@ if [ ! -z $new_value ]; then
     HTTPUPLOAD_MAX_SIZE=$new_value
 fi
 
+# Backup path
+read -p "Backup path (blank to disable backups) []: " new_value
+if [ ! -z $new_value ]; then
+    BACKUP_PATH=$new_value
+fi
+
 cat <<EOF >local.properties
 # Kontalk server configuration
 # if you edit this file you must rebuild your containers:
@@ -168,6 +175,7 @@ MYSQL_PASSWORD=${MYSQL_PASSWORD}
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 # database timezone
 MYSQL_TIMEZONE=${MYSQL_TIMEZONE}
+# database initial baseline
 # alter this only if you know what you are doing
 DATABASE_BASELINE=1
 
@@ -182,6 +190,9 @@ HTTPUPLOAD_LISTEN_PORT=${HTTPUPLOAD_LISTEN_PORT}
 # HTTP URLs
 HTTPUPLOAD_PUT_URL=${HTTPUPLOAD_PUT_URL}
 HTTPUPLOAD_GET_URL=${HTTPUPLOAD_GET_URL}
+
+# Backup location
+BACKUP_PATH=${BACKUP_PATH}
 EOF
 
 rm -f .version
