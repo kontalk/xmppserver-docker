@@ -97,6 +97,11 @@ docker_compose() {
     (export IMAGE_VERSION=$(cat .version); set -x; ${dockercompose_path} -p ${INSTANCE_NAME} $*)
 }
 
+docker_compose_internal() {
+    check_version
+    (export IMAGE_VERSION=$(cat .version); ${dockercompose_path} -p ${INSTANCE_NAME} $*)
+}
+
 docker_compose_exec() {
     check_version
     export IMAGE_VERSION=$(cat .version); set -x; exec ${dockercompose_path} -p ${INSTANCE_NAME} $*
@@ -230,6 +235,8 @@ run_stop() {
 }
 
 run_backup() {
+    check_version
+
     if [[ ! -d "${BACKUP_PATH}" ]]; then
         echo "Backup path not configured or not a directory. Please configure an accessible directory in the BACKUP_PATH configuration key in local.properties."
         exit 1
@@ -242,28 +249,38 @@ run_backup() {
     mkdir -p "${OUTDIR}/xmpp"
 
     # dump the database
-    docker_compose exec xmpp /usr/bin/mysqldump \
-        --skip-opt \
-        --single-transaction \
-        --quick \
-        --create-options \
-        --extended-insert \
-        --set-charset \
-        --no-autocommit \
-        --host=db --user=kontalk --password="${MYSQL_PASSWORD}" \
-        kontalk >"${OUTDIR}/db/kontalk.sql"
+    echo "${bold}Dumping database${normal}"
+    # TODO fallback to an emergency container if original fails
+    if ! docker_compose exec -T db /usr/bin/mysqldump \
+            --skip-opt \
+            --single-transaction \
+            --quick \
+            --create-options \
+            --extended-insert \
+            --routines \
+            --set-charset \
+            --no-autocommit \
+            --user=kontalk --password="${MYSQL_PASSWORD}" \
+            kontalk >"${OUTDIR}/db/kontalk.sql" ; then
+        echo
+        echo -e "${bold}Unable to backup database. Ensure the database container is running by launching: \`./launcher start db\`${normal}" &&
+        exit 1
+    fi
 
     # copy httpupload files
     # not really transactional, but we can live with it
+    echo "${bold}Dumping httpupload files${normal}"
     docker run --rm -v "${INSTANCE_NAME}_httpupload_data:/out_data" \
         busybox tar -C /out_data -cvf - . >"${OUTDIR}/httpupload/disk.tar"
 
     # copy xmpp files
     # TODO create kyoto cabinet tools image based on busybox so we can use kchashmgr copy
+    echo "${bold}Dumping keyring${normal}"
     docker run --rm -v "${INSTANCE_NAME}_xmpp_data:/out_data" \
         busybox cat /out_data/keyring.kch >"${OUTDIR}/xmpp/keyring.kch"
 
     # create the backup file (intentionally manually crafted list of files)
+    echo "${bold}Creating backup archive${normal}"
     OUTFILE="${OUTDIR}.tar.gz"
     tar -C "${OUTDIR}" -cvzf "${OUTFILE}" \
         "db/" \
@@ -276,18 +293,69 @@ run_backup() {
 }
 
 run_restore() {
+    check_version
+
     RESTORE_FILE="$1"
     # TODO if $1 is empty, take latest (by name) file in BACKUP_PATH/${INSTANCE_NAME}_*.tar.gz
+    if [[ "${RESTORE_FILE}" == "" ]]; then
+        echo "Usage: launcher restore <backup_file.tar.gz>"
+        exit 1
+    fi
+    if [[ ! -f "${RESTORE_FILE}" ]]; then
+        echo "Unable to read backup file ${RESTORE_FILE}"
+        exit 1
+    fi
 
-    # TODO ask for confirmation
+    # ask for confirmation
+    echo "${bold}You are about to restore the backup from:"
+    echo "  ${RESTORE_FILE}"
+    echo
+    echo "Any existing containers and their data in instance '${INSTANCE_NAME}' WILL BE DESTROYED.${normal}"
+    echo
+    read -p "Type 'OK' to proceed: " restore_ack
+    [[ "${restore_ack}" == "OK" ]] || exit 1
 
-    # TODO take down the whole stack
+    echo
+    # take down the whole stack and re-create it
+    echo "${bold}Rebuilding all containers and data${normal}"
+    docker_compose down -v
+    docker_compose up --no-start
 
-    # TODO restore...
+    # restore database
+    echo
+    echo "${bold}Restoring database${normal}"
 
-    # TODO
-    echo "Restore not implemented yet."
-    exit 1
+    # wait for the database to spin up
+    docker_compose up -d db
+    while ! docker_compose exec db mysql -u kontalk -p"${MYSQL_PASSWORD}" kontalk -e 'status' &>/dev/null ; do
+        echo "Waiting for database connection..."
+        sleep 4
+    done
+
+    tar -xOzf "${RESTORE_FILE}" "db/kontalk.sql" |
+        docker exec -i $(docker_compose_internal ps -q db) \
+            mysql -u kontalk -p"${MYSQL_PASSWORD}" kontalk
+
+    # restore httpupload files
+    echo
+    echo "${bold}Restoring httpupload files${normal}"
+    docker_compose up -d httpupload
+
+    tar -xOzf "${RESTORE_FILE}" "httpupload/disk.tar" |
+        docker exec -i $(docker_compose_internal ps -q httpupload) \
+            tar -C /home/kontalk/disk -xf -
+
+    # restore xmpp data
+    echo
+    echo "${bold}Restoring keyring${normal}"
+    docker_compose up -d xmpp
+
+    tar -xOzf "${RESTORE_FILE}" "xmpp/keyring.kch" |
+        docker exec -i $(docker_compose_internal ps -q xmpp) \
+            tee /home/kontalk/data/keyring.kch >/dev/null
+
+    echo
+    echo "${bold}Server should now be up and running.${normal}"
 }
 
 case "$command" in
@@ -336,6 +404,7 @@ case "$command" in
         ;;
 
     restore)
+        shift 1
         run_restore $*
         exit 0
         ;;
