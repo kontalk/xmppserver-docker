@@ -13,6 +13,7 @@ sess-man/plugins-conf/fingerprint={{ .Env.FINGERPRINT }}
 
 # The global network domain (do not change this if you want to participate in the Kontalk global network)
 sess-man/plugins-conf/network-domain=kontalk.net
+sess-man/plugins-conf/service-terms-url=https://kontalk.github.io/network/privacy
 
 # Database configuration (the two db-uri parameters must be identical)
 --user-db=mysql
