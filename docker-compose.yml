@@ -1,15 +1,15 @@
 # Services definition for a Kontalk server
-# DO NOT RUN docker-compose on this file directly
-# Use ./launcher start
+# You may run this stack through `docker stack deploy -c docker-compose.yml <instance_name>`
+# or use `./launcher start` if you want a more powerful tool
 
-version: '2'
+version: '3'
 
 services:
   db:
-    container_name: "${INSTANCE_NAME}_db"
     image: mysql:5.6
     volumes:
       - db_data:/var/lib/mysql
+    configs:
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: on-failure
     environment:
@@ -21,9 +21,6 @@ services:
       - default
 
   xmpp:
-    container_name: "${INSTANCE_NAME}_xmpp"
-    depends_on:
-      - db
     image: kontalk/xmppserver:${IMAGE_VERSION}
     ports:
       - "${XMPP_LISTEN_PORT}:5222"
@@ -31,6 +28,7 @@ services:
       - "${XMPPS2S_LISTEN_PORT}:5269"
     volumes:
       - xmpp_data:/home/kontalk/data
+    configs:
       - ./config:/tmp/data
     restart: on-failure
     logging:
@@ -53,12 +51,12 @@ services:
       - elk
 
   httpupload:
-    container_name: "${INSTANCE_NAME}_httpupload"
     image: kontalk/httpupload
     ports:
       - "${HTTPUPLOAD_LISTEN_PORT}:8828"
     volumes:
       - httpupload_data:/home/kontalk/disk
+    configs:
       - ./config/config.yml.in:/tmp/config.yml.in
     restart: on-failure
     logging:
