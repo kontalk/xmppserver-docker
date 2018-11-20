@@ -35,10 +35,6 @@ services:
         target: /home/kontalk/kontalk-server/etc/tigase.conf
       - source: xmpp_trustedca_config
         target: /home/kontalk/kontalk-server/trusted.pem
-      - source: xmpp_gpg_private_key
-        target: /home/kontalk/kontalk-server/server-private.key
-      - source: xmpp_gpg_public_key
-        target: /home/kontalk/kontalk-server/server-public.key
 
       # legacy
       - source: xmpp_initprop_config
@@ -47,10 +43,6 @@ services:
         target: /tmp/data/tigase.conf
       - source: xmpp_trustedca_config
         target: /tmp/data/trusted.pem
-      - source: xmpp_gpg_private_key
-        target: /tmp/data/server-private.key
-      - source: xmpp_gpg_public_key
-        target: /tmp/data/server-public.key
 
     logging:
       options:
@@ -103,19 +95,13 @@ configs:
   db_mysql_config:
     file: ./mysql/my.cnf
   http_config:
-    file: ./config/config.yml.in
+    file: ./data/config.yml.in.dist
   xmpp_initprop_config:
-    file: ./config/init.properties.in
+    file: ./data/init.properties.in.dist
   xmpp_tigaseconf_config:
-    file: ./config/tigase.conf
+    file: ./data/tigase.conf.dist
   xmpp_trustedca_config:
-    file: ./config/trusted.pem
-  xmpp_cachain_config:
-    file: ./config/cachain.pem
-  xmpp_gpg_private_key:
-    file: ./config/server-private.key
-  xmpp_gpg_public_key:
-    file: ./config/server-public.key
+    file: ./data/trusted.pem.dist
 
 networks:
   default:
