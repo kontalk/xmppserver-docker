@@ -2,7 +2,7 @@
 # You may run this stack through `docker stack deploy -c docker-compose.yml <instance_name>`
 # or use `./launcher start` if you want a more powerful tool
 
-version: '3'
+version: '3.3'
 
 services:
   db:
@@ -10,8 +10,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     configs:
-      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-    restart: on-failure
+      - source: ./mysql/my.cnf
+        target: /etc/mysql/conf.d/my.cnf
     environment:
       - MYSQL_DATABASE=kontalk
       - MYSQL_USER=kontalk
@@ -29,8 +29,8 @@ services:
     volumes:
       - xmpp_data:/home/kontalk/data
     configs:
-      - ./config:/tmp/data
-    restart: on-failure
+      - source: ./config
+        target: /tmp/data
     logging:
       options:
         max-size: "10m"
@@ -57,8 +57,8 @@ services:
     volumes:
       - httpupload_data:/home/kontalk/disk
     configs:
-      - ./config/config.yml.in:/tmp/config.yml.in
-    restart: on-failure
+      - source: ./config/config.yml.in
+        target: /tmp/config.yml.in
     logging:
       options:
         max-size: "10m"
