@@ -10,7 +10,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     configs:
-      - source: ./mysql/my.cnf
+      - source: db_mysql_config
         target: /etc/mysql/conf.d/my.cnf
     environment:
       - MYSQL_DATABASE=kontalk
@@ -29,8 +29,29 @@ services:
     volumes:
       - xmpp_data:/home/kontalk/data
     configs:
-      - source: ./config
-        target: /tmp/data
+      - source: xmpp_initprop_config
+        target: /home/kontalk/kontalk-server/etc/init.properties.in
+      - source: xmpp_tigaseconf_config
+        target: /home/kontalk/kontalk-server/etc/tigase.conf
+      - source: xmpp_trustedca_config
+        target: /home/kontalk/kontalk-server/trusted.pem
+      - source: xmpp_gpg_private_key
+        target: /home/kontalk/kontalk-server/server-private.key
+      - source: xmpp_gpg_public_key
+        target: /home/kontalk/kontalk-server/server-public.key
+
+      # legacy
+      - source: xmpp_initprop_config
+        target: /tmp/data/init.properties.in
+      - source: xmpp_tigaseconf_config
+        target: /tmp/data/tigase.conf
+      - source: xmpp_trustedca_config
+        target: /tmp/data/trusted.pem
+      - source: xmpp_gpg_private_key
+        target: /tmp/data/server-private.key
+      - source: xmpp_gpg_public_key
+        target: /tmp/data/server-public.key
+
     logging:
       options:
         max-size: "10m"
@@ -57,7 +78,7 @@ services:
     volumes:
       - httpupload_data:/home/kontalk/disk
     configs:
-      - source: ./config/config.yml.in
+      - source: http_config
         target: /tmp/config.yml.in
     logging:
       options:
@@ -77,6 +98,24 @@ volumes:
   db_data:
   xmpp_data:
   httpupload_data:
+
+configs:
+  db_mysql_config:
+    file: ./mysql/my.cnf
+  http_config:
+    file: ./config/config.yml.in
+  xmpp_initprop_config:
+    file: ./config/init.properties.in
+  xmpp_tigaseconf_config:
+    file: ./config/tigase.conf
+  xmpp_trustedca_config:
+    file: ./config/trusted.pem
+  xmpp_cachain_config:
+    file: ./config/cachain.pem
+  xmpp_gpg_private_key:
+    file: ./config/server-private.key
+  xmpp_gpg_public_key:
+    file: ./config/server-public.key
 
 networks:
   default:
