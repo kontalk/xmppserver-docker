@@ -28,7 +28,7 @@ pubsub/pubsub-repo-url=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .E
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/providers[s]=dummy=org.kontalk.xmppserver.registration.DummyProvider
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
 # set to true to disable registration security checks
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/disable-security=false
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/disable-security[B]=false
 
 # Endpoints configuration
 # All endpoints must declare a clientCertCA pointing to a valid certificate chain file
