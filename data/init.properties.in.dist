@@ -27,8 +27,26 @@ pubsub/pubsub-repo-url=jdbc:mysql://db:3306/{{ .Env.MYSQL_DATABASE }}?user={{ .E
 # Good for a remote test server
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/providers[s]=dummy=org.kontalk.xmppserver.registration.DummyProvider
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
-# set to true to disable registration security checks
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/disable-security[B]=false
+
+# security features to enable - leave empty to disable all
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/security[s]=throttling-ip,throttling-phone,throttling-prefix
+
+# IP-based throttling: delay in seconds
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/ip/delay[I]=60
+# IP-based throttling: max attempts before triggering throttling
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/ip/trigger-attempts[I]=3
+
+# phone-based throttling: delay in seconds
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/phone/delay[I]=60
+# phone-based throttling: max attempts before triggering throttling
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/phone/trigger-attempts[I]=3
+
+# prefix-based throttling: delay in seconds
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/delay[I]=60
+# prefix-based throttling: max attempts before triggering throttling
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/trigger-attempts[I]=3
+# prefix-based throttling: most significant digits to consider (excluding the plus sign)
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/length[I]=6
 
 # Endpoints configuration
 # All endpoints must declare a clientCertCA pointing to a valid certificate chain file
