@@ -32,21 +32,21 @@ sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/security[s]=throttling-ip,throttling-phone,throttling-prefix
 
 # IP-based throttling: delay in seconds
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/ip/delay[I]=60
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-ip.delay[I]=30
 # IP-based throttling: max attempts before triggering throttling
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/ip/trigger-attempts[I]=3
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-ip.trigger-attempts[I]=3
 
 # phone-based throttling: delay in seconds
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/phone/delay[I]=60
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-phone.delay[I]=30
 # phone-based throttling: max attempts before triggering throttling
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/phone/trigger-attempts[I]=3
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-phone.trigger-attempts[I]=3
 
 # prefix-based throttling: delay in seconds
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/delay[I]=60
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-prefix.delay[I]=30
 # prefix-based throttling: max attempts before triggering throttling
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/trigger-attempts[I]=3
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-prefix.trigger-attempts[I]=3
 # prefix-based throttling: most significant digits to consider (excluding the plus sign)
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling/prefix/length[I]=6
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/throttling-prefix.length[I]=6
 
 # Endpoints configuration
 # All endpoints must declare a clientCertCA pointing to a valid certificate chain file
