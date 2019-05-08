@@ -161,7 +161,7 @@ run_bootstrap() {
 
     # build images
     echo "This could take several minutes."
-    docker pull kontalk/xmppserver:${docker_tag} || monitor_docker_build kontalk/xmppserver:${docker_tag} tigase --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild}
+    monitor_docker_build kontalk/xmppserver:${docker_tag} tigase --build-arg BRANCH=${build} --build-arg SERVER_BRANCH=${serverbuild}
     monitor_docker_build kontalk/httpupload httpupload
     echo
 
@@ -222,6 +222,14 @@ run_bootstrap() {
         echo "Using default HTTP upload component configuration"
         cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${CONFDIR}/${HTTUPLOAD_CONF}
         echo
+    fi
+
+    # trusted keystore
+    rm -f ${CONFDIR}/truststore
+    if [ -d trustedcerts ]; then
+        for i in trustedcerts/*.cer; do
+            keytool -importcert -keystore ${CONFDIR}/truststore -storepass truststore -noprompt -alias $(basename ${i} .cer) -file ${i} &>/dev/null
+        done
     fi
 
     echo ${docker_tag} > .version

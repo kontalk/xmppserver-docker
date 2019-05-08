@@ -109,6 +109,16 @@ you should especially check JAVA\_OPTIONS which contains the JVM parameters (hea
 Note that despite the extension, it's a simple shell script file sourced by the server startup script,
 so bash syntax applies.
 
+### Trust store for outgoing SSL connection
+
+You can use a custom trust store for outgoing SSL connections (e.g. from registration or push providers). The launcher
+script will produce one automatically for you. Just create a directory called `trustedcerts` and put one certificate
+per file in there. Be sure the files end in `.cer`. Then update JAVA\_OPTIONS in `config/tigase.conf` and add this at the end:
+
+```
+ -Djavax.net.ssl.trustStore=truststore -Djavax.net.ssl.trustStorePassword=truststore
+```
+
 ## Start the containers
 
 Run this command:

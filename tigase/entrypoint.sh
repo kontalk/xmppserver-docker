@@ -95,6 +95,7 @@ fi
 # copy some other stuff
 cp /tmp/data/tigase.conf ${HOME}/kontalk-server/etc/tigase.conf
 cp /tmp/data/trusted.pem ${HOME}/kontalk-server/trusted.pem
+[[ -f /tmp/data/truststore ]] && cp /tmp/data/truststore ${HOME}/kontalk-server/truststore
 
 # export keys to file
 gpg2 --export ${FINGERPRINT} >${HOME}/kontalk-server/server-public.key
