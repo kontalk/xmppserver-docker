@@ -2,7 +2,7 @@
 set -e
 
 function urlencode() {
-    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
+    echo -n "$1" | perl -pe 's/([^a-zA-Z0-9_.!~*()'\''-])/sprintf("%%%02X", ord($1))/ge'
 }
 
 # create SSL certificate if needed
