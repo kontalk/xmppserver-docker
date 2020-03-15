@@ -9,7 +9,8 @@ COPY apt_preferences /etc/apt/preferences
 
 # install packages
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
-    wget git maven mysql-client openssl certbot openjdk-8-jdk gnupg2 make g++ libkyotocabinet16v5 libkyotocabinet-dev
+    wget git maven mysql-client openssl certbot openjdk-8-jdk make g++ libkyotocabinet16v5 libkyotocabinet-dev && \
+    apt-get -qq -y --no-install-recommends install -t stretch-backports gnupg
 RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 # install tools
