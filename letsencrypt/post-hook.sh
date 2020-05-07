@@ -16,8 +16,11 @@ install_certificate() {
     fi
 
     # download CA certificates
-    wget -q https://letsencrypt.org/certs/letsencryptauthorityx3.pem -O /tmp/level2.pem
-    wget -q https://letsencrypt.org/certs/isrgrootx1.pem -O /tmp/level1.pem
+    # the world is not ready for this yet
+    #wget -q https://letsencrypt.org/certs/letsencryptauthorityx3.pem -O /tmp/level2.pem
+    #wget -q https://letsencrypt.org/certs/isrgrootx1.pem -O /tmp/level1.pem
+    wget -q https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem -O /tmp/level2.pem
+    wget -q https://letsencrypt.org/certs/trustid-x3-root.pem -O /tmp/level1.pem
 
     cp ${LIVEDIR}/cert.pem ../config/certificate.pem
     cp ${LIVEDIR}/privkey.pem ../config/privatekey.pem
