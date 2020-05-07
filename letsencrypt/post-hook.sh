@@ -15,13 +15,9 @@ install_certificate() {
         return
     fi
 
-    # download CA certificates
-    wget -q https://letsencrypt.org/certs/letsencryptauthorityx3.pem -O /tmp/level2.pem
-    wget -q https://letsencrypt.org/certs/isrgrootx1.pem -O /tmp/level1.pem
-
     cp ${LIVEDIR}/cert.pem ../config/certificate.pem
     cp ${LIVEDIR}/privkey.pem ../config/privatekey.pem
-    cat /tmp/level2.pem /tmp/level1.pem >../config/cachain.pem
+    cp ${LIVEDIR}/chain.pem ../config/cachain.pem
 }
 
 if [ -z "${XMPP_SERVICE}" ]; then
