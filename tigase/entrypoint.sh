@@ -25,6 +25,9 @@ else
     [ -f /tmp/data/cachain.pem ] && cat /tmp/data/cachain.pem >>${SSL_CERT}
 fi
 
+# use same certificate for the pubsub domain
+cp "${SSL_CERT}" "${HOME}/kontalk-server/certs/pubsub.${XMPP_SERVICE}.pem"
+
 # create GPG key if needed
 if [ ! -f /tmp/data/server-private.key ] || [ ! -f /tmp/data/server-public.key ];
 then
