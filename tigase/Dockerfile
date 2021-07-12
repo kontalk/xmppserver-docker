@@ -1,17 +1,12 @@
 # use BRANCH variable to provide source code branch
-FROM debian:stretch-backports
+FROM debian:buster
 LABEL "org.kontalk"="Kontalk devteam"
 LABEL description="Kontalk server base image"
 
-# add testing and apt preferences
-RUN echo "deb http://http.debian.net/debian testing main" >/etc/apt/sources.list.d/testing.list
-COPY apt_preferences /etc/apt/preferences
-
 # install packages
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
-    wget git maven mysql-client openssl certbot openjdk-8-jdk make g++ libkyotocabinet16v5 libkyotocabinet-dev && \
-    apt-get -qq -y --no-install-recommends install -t stretch-backports gnupg
-RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
+    wget git maven default-mysql-client openssl certbot openjdk-11-jdk make g++ libkyotocabinet16v5 libkyotocabinet-dev gnupg
+RUN update-java-alternatives -s java-1.11.0-openjdk-amd64
 
 # install tools
 ENV DOCKERIZE_VERSION v0.6.0
@@ -32,7 +27,7 @@ WORKDIR /home/kontalk
 RUN mkdir -p data
 
 # build kontalk server
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ARG BRANCH
 ENV BRANCH ${BRANCH:-master}
 RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/${BRANCH}/scripts/installer.sh | bash -s - kontalk-server ${BRANCH}
